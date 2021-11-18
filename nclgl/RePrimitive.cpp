@@ -7,7 +7,7 @@ RePrimitive::RePrimitive(std::shared_ptr<Mesh> InMesh, bool InTransparent, ReMat
 	, mMaterial(InMaterial)
 	, mMaterialParam(InMaterialParam)
 {
-	CalculateBoundingRadius();
+	//CalculateBoundingRadius();
 }
 
 RePrimitive::~RePrimitive()

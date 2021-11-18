@@ -15,11 +15,26 @@ void ReFrustum::FromMatrix(const Matrix4& MatrixVP)
 	planes[5] = Plane(waxis - zaxis, (MatrixVP.values[15] - MatrixVP.values[14]), true);
 }
 
-bool ReFrustum::InsideFrustum(RePrimitiveComponentPtr Primitive)
+bool ReFrustum::InsideFrustum(const Vector3& Position, const float BoundingRadius)
 {
 	for (size_t p = 0; p < 6; p++)
 	{
-		if (!planes[p].SphereInPlane(Primitive->GetWorldTransform().GetPositionVector(), Primitive->GetBoundingRadius()))
+		if (!planes[p].SphereInPlane(Position, BoundingRadius))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool ReFrustum::InsideFrustum(const ReFrustumObjectPtr& Object)
+{
+	Vector3 Position = Object->GetPosition();
+	float Radius = Object->GetBoundingRadius();
+
+	for (size_t p = 0; p < 6; p++)
+	{
+		if (!planes[p].SphereInPlane(Position, Radius))
 		{
 			return false;
 		}

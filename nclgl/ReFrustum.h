@@ -1,7 +1,7 @@
 #pragma once
 #include "Matrix4.h"
 #include "Plane.h"
-#include "RePrimitiveComponent.h"
+#include "ReFrustumObject.h"
 
 class ReFrustum
 {
@@ -10,7 +10,9 @@ public:
 	~ReFrustum(void) {};
 
 	void FromMatrix(const Matrix4& MatrixVP);
-	bool InsideFrustum(RePrimitiveComponentPtr Primitive);
+	bool InsideFrustum(const Vector3& Position, const float BoundingRadius);
+	bool InsideFrustum(const ReFrustumObjectPtr& Object);
+	
 
 protected:
 	Plane planes[6];

@@ -8,7 +8,6 @@ public:
 	ReNodeComponent();
 	virtual	~ReNodeComponent() {};
 
-	virtual bool IsPrimitive() const { return false; };
 	virtual void Update(float msec) {};
 	
 	Matrix4 GetTransform() const;

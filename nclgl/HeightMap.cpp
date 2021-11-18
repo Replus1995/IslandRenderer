@@ -27,7 +27,7 @@ HeightMap::HeightMap(const std::string& name)
 		for (int x = 0; x < iWidth; x++)
 		{
 			int offset = (z * iWidth) + x;
-			*(vertices + offset) = Vector3((float)x, (float)data[offset], (float)z) * vertexScale;
+			*(vertices + offset) = Vector3((float)(x - iWidth / 2), (float)data[offset], (float)(z - iHeight / 2)) * vertexScale;
 			*(textureCoords + offset) = Vector2((float)x, (float)z) * textureScale;
 		}
 	}

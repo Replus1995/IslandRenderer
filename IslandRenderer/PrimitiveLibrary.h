@@ -20,6 +20,11 @@ private:
 
 enum PrimitiveIndex : unsigned int
 {
-	PRI_HEIGHT_MAP = 0,
+	PRI_COMBINE = 0,
+	PRI_SKY_BOX,
+	PRI_DIRECT_LIGHT,
+	PRI_POINT_LIGHT,
+	PRI_HEIGHT_MAP,
+	PRI_CUBE,
 	PRI_MAX
 };

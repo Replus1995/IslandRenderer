@@ -139,17 +139,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PointLightFilter.cpp" />
+    <ClCompile Include="PrimitiveFilter.cpp" />
     <ClCompile Include="PrimitiveLibrary.cpp" />
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneGenerator.cpp" />
+    <ClCompile Include="ShadowFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MaterialCollection.h" />
+    <ClInclude Include="Materials\CombineMat.h" />
     <ClInclude Include="Materials\HeightMapMat.h" />
-    <ClInclude Include="PrimitiveContainer.h" />
+    <ClInclude Include="Materials\LightMat.h" />
+    <ClInclude Include="FilterContainer.h" />
+    <ClInclude Include="Materials\PlainMat.h" />
+    <ClInclude Include="Materials\ShadowMat.h" />
+    <ClInclude Include="Materials\SkyBoxMat.h" />
+    <ClInclude Include="PointLightFilter.h" />
+    <ClInclude Include="PrimitiveFilter.h" />
     <ClInclude Include="PrimitiveLibrary.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneGenerator.h" />
+    <ClInclude Include="ShadowFilter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

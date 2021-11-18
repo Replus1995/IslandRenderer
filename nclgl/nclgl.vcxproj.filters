@@ -40,12 +40,6 @@
     <ClCompile Include="ReSceneNode.cpp">
       <Filter>ReFiles</Filter>
     </ClCompile>
-    <ClCompile Include="ReNodeComponent.cpp">
-      <Filter>ReFiles</Filter>
-    </ClCompile>
-    <ClCompile Include="RePrimitiveComponent.cpp">
-      <Filter>ReFiles</Filter>
-    </ClCompile>
     <ClCompile Include="ReMaterial.cpp">
       <Filter>ReFiles</Filter>
     </ClCompile>
@@ -57,6 +51,24 @@
     </ClCompile>
     <ClCompile Include="RePrimitive.cpp">
       <Filter>ReFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="ReSceneBuffer.cpp">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="ReLightBuffer.cpp">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="ReNodeComponent.cpp">
+      <Filter>ReFiles\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RePrimitiveComponent.cpp">
+      <Filter>ReFiles\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RePointLightComponent.cpp">
+      <Filter>ReFiles\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ReShadowBuffer.cpp">
+      <Filter>ReFiles\FrameBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,12 +122,6 @@
     <ClInclude Include="ReSceneNode.h">
       <Filter>ReFiles</Filter>
     </ClInclude>
-    <ClInclude Include="ReNodeComponent.h">
-      <Filter>ReFiles</Filter>
-    </ClInclude>
-    <ClInclude Include="RePrimitiveComponent.h">
-      <Filter>ReFiles</Filter>
-    </ClInclude>
     <ClInclude Include="ReMaterial.h">
       <Filter>ReFiles</Filter>
     </ClInclude>
@@ -127,6 +133,33 @@
     </ClInclude>
     <ClInclude Include="RePrimitive.h">
       <Filter>ReFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ReFrameBuffer.h">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ReSceneBuffer.h">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ReLightBuffer.h">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="ReNodeComponent.h">
+      <Filter>ReFiles\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RePrimitiveComponent.h">
+      <Filter>ReFiles\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RePointLightComponent.h">
+      <Filter>ReFiles\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ReFrustumObject.h">
+      <Filter>ReFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ReDLight.h">
+      <Filter>ReFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="ReShadowBuffer.h">
+      <Filter>ReFiles\FrameBuffer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +174,12 @@
     </Filter>
     <Filter Include="ReFiles">
       <UniqueIdentifier>{3003fe9e-46e1-415c-9a07-816f3f72d5f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReFiles\FrameBuffer">
+      <UniqueIdentifier>{fc513a01-3a91-45d1-a412-94b623b88514}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ReFiles\Component">
+      <UniqueIdentifier>{7a28ffc9-1bf2-41f1-9d39-1dac66a3d968}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

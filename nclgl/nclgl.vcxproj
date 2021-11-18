@@ -23,9 +23,12 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="ReFrustum.cpp" />
+    <ClCompile Include="ReSceneBuffer.cpp" />
+    <ClCompile Include="ReLightBuffer.cpp" />
     <ClCompile Include="ReMaterial.cpp" />
     <ClCompile Include="ReMaterialLibrary.cpp" />
     <ClCompile Include="ReNodeComponent.cpp" />
+    <ClCompile Include="RePointLightComponent.cpp" />
     <ClCompile Include="RePrimitiveComponent.cpp" />
     <ClCompile Include="ReSceneNode.cpp" />
     <ClCompile Include="Frustum.cpp" />
@@ -43,6 +46,7 @@
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quaternion.cpp" />
     <ClCompile Include="RePrimitive.cpp" />
+    <ClCompile Include="ReShadowBuffer.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -51,7 +55,12 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="common.h" />
     <ClInclude Include="ComputeShader.h" />
+    <ClInclude Include="ReDLight.h" />
+    <ClInclude Include="ReFrameBuffer.h" />
     <ClInclude Include="ReFrustum.h" />
+    <ClInclude Include="ReSceneBuffer.h" />
+    <ClInclude Include="ReLightBuffer.h" />
+    <ClInclude Include="RePointLightComponent.h" />
     <ClInclude Include="ReMaterial.h" />
     <ClInclude Include="ReMaterialLibrary.h" />
     <ClInclude Include="ReNodeComponent.h" />
@@ -74,6 +83,8 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
     <ClInclude Include="RePrimitive.h" />
+    <ClInclude Include="ReFrustumObject.h" />
+    <ClInclude Include="ReShadowBuffer.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Vector2.h" />

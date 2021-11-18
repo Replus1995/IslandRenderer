@@ -8,24 +8,10 @@ ReNodeComponent::ReNodeComponent()
 
 Matrix4 ReNodeComponent::GetTransform() const
 {
-	if (mParent)
-	{
-		return mParent->GetTransform();
-	}
-	else
-	{
-		return Matrix4();
-	}
+	return mParent ? mParent->GetTransform() : Matrix4();
 }
 
 Matrix4 ReNodeComponent::GetWorldTransform() const
 {
-	if (mParent)
-	{
-		return mParent->GetWorldTransform();
-	}
-	else
-	{
-		return Matrix4();
-	}
+	return mParent ? mParent->GetWorldTransform() : Matrix4();
 }

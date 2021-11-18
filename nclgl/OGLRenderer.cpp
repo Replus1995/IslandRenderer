@@ -213,9 +213,10 @@ void OGLRenderer::UpdateShaderMatrices()	{
 	}
 }
 
-void OGLRenderer::BindShader(Shader*s) {
+void OGLRenderer::BindShader(Shader* s) 
+{
 	currentShader = s;
-	glUseProgram(s->GetProgram());
+	glUseProgram(currentShader ? currentShader->GetProgram() : 0);
 }
 
 void OGLRenderer::SetTextureRepeating(GLuint target, bool state)

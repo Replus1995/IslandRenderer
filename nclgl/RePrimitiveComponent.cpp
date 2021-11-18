@@ -9,23 +9,31 @@ RePrimitiveComponent::~RePrimitiveComponent()
 {
 }
 
-
-void RePrimitiveComponent::Draw()
-{
-	if (!mPrimitive) return;
-
-	mPrimitive->UpdateMaterialParams();
-	mPrimitive->DrawMesh();
-}
-
 bool RePrimitiveComponent::IsTransparent() const
 {
 	return mPrimitive ? mPrimitive->IsTransparent() : false;
 }
 
+void RePrimitiveComponent::Draw(bool bUseMaterial)
+{
+	if (!mPrimitive) return;
+	if (bUseMaterial)
+		mPrimitive->UpdateMaterialParams();
+	mPrimitive->DrawMesh();
+}
+
+
+Vector3 RePrimitiveComponent::GetPosition() const
+{
+	return  GetWorldTransform().GetPositionVector();
+}
+
 float RePrimitiveComponent::GetBoundingRadius() const
 {
-	return mPrimitive ? mPrimitive->GetBoundingRadius() : 0.0f;
+	float MeshRadius = mPrimitive ? mPrimitive->GetBoundingRadius() : 0.0f;
+	Vector3 VecRadius = GetWorldTransform().GetScalingVector() * MeshRadius;
+	float MaxRadius = std::max(std::max(VecRadius.x, VecRadius.y), VecRadius.z);
+	return MaxRadius;
 }
 
 Shader* RePrimitiveComponent::GetShader() const

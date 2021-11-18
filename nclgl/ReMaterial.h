@@ -7,6 +7,14 @@ class ReMaterialParam
 public:
 	ReMaterialParam() {};
 	virtual ~ReMaterialParam() {};
+
+	static void SetTextureRepeating(GLuint TargetTex, bool Repeating) 
+	{
+		glBindTexture(GL_TEXTURE_2D, TargetTex);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, Repeating ? GL_REPEAT : GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, Repeating ? GL_REPEAT : GL_CLAMP);
+		glBindTexture(GL_TEXTURE_2D, 0);
+	};
 };
 
 typedef std::shared_ptr<ReMaterialParam> ReMaterialParamPtr;
@@ -23,9 +31,10 @@ public:
 		const std::string& geometry = "", const std::string& domain = "", const std::string& hull = "");
 	Shader* GetShader() { return mShader; };
 	
-	void SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex);
-	void SetShaderVector3(const std::string& ParamName, const Vector3& InVector);
-	void SetShaderMatrix(const std::string& ParamName, const Matrix4& InMatrix);
+	void SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex) const;
+	void SetShaderVector2(const std::string& ParamName, const Vector2& InVector) const;
+	void SetShaderVector3(const std::string& ParamName, const Vector3& InVector) const;
+	void SetShaderMatrix(const std::string& ParamName, const Matrix4& InMatrix) const;
 
 	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam) {};
 

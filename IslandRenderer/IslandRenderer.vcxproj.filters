@@ -12,6 +12,9 @@
     <Filter Include="Materials">
       <UniqueIdentifier>{6c50cd77-8ba0-466b-9759-80f83b9fae60}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ObjectFilter">
+      <UniqueIdentifier>{6b3cba63-4b33-4bd2-946a-1b66610af8cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -25,6 +28,15 @@
     </ClCompile>
     <ClCompile Include="SceneGenerator.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLightFilter.cpp">
+      <Filter>ObjectFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveFilter.cpp">
+      <Filter>ObjectFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowFilter.cpp">
+      <Filter>ObjectFilter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,8 +55,32 @@
     <ClInclude Include="SceneGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PrimitiveContainer.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Materials\LightMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\CombineMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\ShadowMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\PlainMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\SkyBoxMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterContainer.h">
+      <Filter>ObjectFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLightFilter.h">
+      <Filter>ObjectFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveFilter.h">
+      <Filter>ObjectFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowFilter.h">
+      <Filter>ObjectFilter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
