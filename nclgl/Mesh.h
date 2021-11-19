@@ -19,6 +19,7 @@ _-_-_-_-_-_-_-""  ""
 #pragma once
 
 #include "OGLRenderer.h"
+#include <memory>
 #include <vector>
 #include <string>
 
@@ -127,3 +128,4 @@ protected:
 	std::vector<std::string>	layerNames;
 };
 
+typedef std::shared_ptr<Mesh> MeshPtr;

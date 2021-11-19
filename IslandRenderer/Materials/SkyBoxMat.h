@@ -16,9 +16,9 @@ public:
 	{
 		std::shared_ptr<SkyBoxMatParam> NewParam(new SkyBoxMatParam());
 		NewParam->SkyTex = SOIL_load_OGL_cubemap(
-			TEXTUREDIR"rusted_west.jpg", TEXTUREDIR"rusted_east.jpg",
-			TEXTUREDIR"rusted_up.jpg", TEXTUREDIR"rusted_down.jpg",
-			TEXTUREDIR"rusted_south.jpg", TEXTUREDIR"rusted_north.jpg",
+			TEXTUREDIR"skybox/right.jpg", TEXTUREDIR"skybox/left.jpg",
+			TEXTUREDIR"skybox/top.jpg", TEXTUREDIR"skybox/bottom.jpg",
+			TEXTUREDIR"skybox/front.jpg", TEXTUREDIR"skybox/back.jpg",
 			SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
 		return NewParam;
 	};

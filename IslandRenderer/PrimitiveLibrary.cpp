@@ -4,8 +4,6 @@
 
 #include "MaterialCollection.h"
 
-typedef std::shared_ptr<Mesh> MeshPtr;
-
 PrimitiveLibrary::PrimitiveLibrary()
 {
 }
@@ -44,7 +42,8 @@ void PrimitiveLibrary::ReadPrimitivesFromDisk()
 	///PointLight Sphere///
 
 	///Read HeightMap///
-	std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"noise.png"));
+	//std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"noise.png"));
+	std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"IslandTerrain.png"));
 	ReMaterialPtr HeightMap_Mat(new HeightMapMat());
 	ReMaterialParamPtr HeightMap_MatParam = HeightMapMatParam::LoadDefault();
 	RePrimitivePtr HeightMap_Primitive(new RePrimitive(HeightMap_Mesh, false, HeightMap_Mat, HeightMap_MatParam));
