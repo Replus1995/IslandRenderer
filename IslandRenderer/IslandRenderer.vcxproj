@@ -72,7 +72,7 @@
     <LibraryPath>..\..\SOIL\$(Configuration)\;..\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>..\Third Party\;$(ProjectDir)..\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\;$(ProjectDir)..\Third Party\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\SOIL\$(Configuration)\;..\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,7 +80,7 @@
     <LibraryPath>..\..\SOIL\$(Configuration)\;..\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Third Party\;$(ProjectDir)..\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)..\;$(ProjectDir)..\Third Party\;$(IncludePath)</IncludePath>
     <LibraryPath>..\..\SOIL\$(Configuration)\;..\$(Platform)\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -138,6 +138,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GLTFLoader.cpp" />
+    <ClCompile Include="GLTFPrimitiveMesh.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PointLightFilter.cpp" />
     <ClCompile Include="PrimitiveFilter.cpp" />
@@ -145,16 +147,22 @@
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="SceneGenerator.cpp" />
     <ClCompile Include="ShadowFilter.cpp" />
+    <ClCompile Include="TinyGLTF.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MaterialCollection.h" />
+    <ClInclude Include="GLTFLoader.h" />
+    <ClInclude Include="GLTFPrimitiveMesh.h" />
     <ClInclude Include="Materials\CombineMat.h" />
+    <ClInclude Include="Materials\GLTFMat.h" />
     <ClInclude Include="Materials\HeightMapMat.h" />
     <ClInclude Include="Materials\LightMat.h" />
     <ClInclude Include="FilterContainer.h" />
+    <ClInclude Include="Materials\MaterialCollection.h" />
     <ClInclude Include="Materials\PlainMat.h" />
     <ClInclude Include="Materials\ShadowMat.h" />
     <ClInclude Include="Materials\SkyBoxMat.h" />
+    <ClInclude Include="Materials\WaterMat.h" />
+    <ClInclude Include="NodeComponent\WaterComponent.h" />
     <ClInclude Include="PointLightFilter.h" />
     <ClInclude Include="PrimitiveFilter.h" />
     <ClInclude Include="PrimitiveLibrary.h" />

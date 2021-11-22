@@ -1,0 +1,6 @@
+#define TINYGLTF_IMPLEMENTATION
+#define TINYGLTF_NO_STB_IMAGE
+#define TINYGLTF_NO_STB_IMAGE_WRITE
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define TINYGLTF_USE_CPP14
+#include <tinygltf/tiny_gltf.h>

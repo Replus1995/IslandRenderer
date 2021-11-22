@@ -11,7 +11,7 @@ public:
 	};
 	~PointLightMat() {};
 
-	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam){};
+	virtual void UpdateRenderParam(){};
 };
 
 
@@ -25,5 +25,5 @@ public:
 	};
 	~DLightMat() {};
 
-	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam) {};
+	virtual void UpdateRenderParam() {};
 };

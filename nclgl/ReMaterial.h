@@ -2,23 +2,6 @@
 #include <memory>
 #include "Shader.h"
 
-class ReMaterialParam
-{
-public:
-	ReMaterialParam() {};
-	virtual ~ReMaterialParam() {};
-
-	static void SetTextureRepeating(GLuint TargetTex, bool Repeating) 
-	{
-		glBindTexture(GL_TEXTURE_2D, TargetTex);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, Repeating ? GL_REPEAT : GL_CLAMP);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, Repeating ? GL_REPEAT : GL_CLAMP);
-		glBindTexture(GL_TEXTURE_2D, 0);
-	};
-};
-
-typedef std::shared_ptr<ReMaterialParam> ReMaterialParamPtr;
-
 class ReMaterial
 {
 public:
@@ -31,12 +14,19 @@ public:
 		const std::string& geometry = "", const std::string& domain = "", const std::string& hull = "");
 	Shader* GetShader() { return mShader; };
 	
-	void SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex) const;
+	static void SetTextureRepeating(GLuint TargetTex, bool Repeating);
+
+	void SetShaderBool(const std::string& ParamName, bool InValue) const;
+	void SetShaderInt(const std::string& ParamName, int InValue) const;
+	void SetShaderUInt(const std::string& ParamName, unsigned int InValue) const;
+	void SetShaderFloat(const std::string& ParamName, float InValue) const;
 	void SetShaderVector2(const std::string& ParamName, const Vector2& InVector) const;
 	void SetShaderVector3(const std::string& ParamName, const Vector3& InVector) const;
-	void SetShaderMatrix(const std::string& ParamName, const Matrix4& InMatrix) const;
+	void SetShaderVector4(const std::string& ParamName, const Vector4& InVector) const;
+	void SetShaderMatrix4(const std::string& ParamName, const Matrix4& InMatrix) const;
+	void SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex) const;
 
-	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam) {};
+	virtual void UpdateRenderParam() {};
 
 	static void DeleteAllShaders();
 

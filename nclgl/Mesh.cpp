@@ -27,15 +27,6 @@ Mesh::Mesh(void)	{
 Mesh::~Mesh(void)	{
 	glDeleteVertexArrays(1, &arrayObject);			//Delete our VAO
 	glDeleteBuffers(MAX_BUFFER, bufferObject);		//Delete our VBOs
-
-	delete[]	vertices;
-	delete[]	indices;
-	delete[]	textureCoords;
-	delete[]	tangents;
-	delete[]	normals;
-	delete[]	colours;
-	delete[]	weights;
-	delete[]	weightIndices;
 }
 
 void Mesh::Draw()	{
@@ -81,33 +72,33 @@ void	Mesh::BufferData()	{
 	glBindVertexArray(arrayObject);
 
 	////Buffer vertex data
-	UploadAttribute(&bufferObject[VERTEX_BUFFER], numVertices, sizeof(Vector3), 3, VERTEX_BUFFER, vertices, "Positions");
+	UploadAttribute(&bufferObject[VERTEX_BUFFER], numVertices, sizeof(Vector3), 3, VERTEX_BUFFER, vertices.get(), "Positions");
 
 	if(textureCoords) {	//Buffer texture data
-		UploadAttribute(&bufferObject[TEXTURE_BUFFER], numVertices, sizeof(Vector2), 2, TEXTURE_BUFFER, textureCoords, "TexCoords");
+		UploadAttribute(&bufferObject[TEXTURE_BUFFER], numVertices, sizeof(Vector2), 2, TEXTURE_BUFFER, textureCoords.get(), "TexCoords");
 	}
 
 	if (colours) {
-		UploadAttribute(&bufferObject[COLOUR_BUFFER], numVertices, sizeof(Vector4), 4, COLOUR_BUFFER, colours, "Colours");
+		UploadAttribute(&bufferObject[COLOUR_BUFFER], numVertices, sizeof(Vector4), 4, COLOUR_BUFFER, colours.get(), "Colours");
 	}
 
 	if (normals) {	//Buffer normal data
-		UploadAttribute(&bufferObject[NORMAL_BUFFER], numVertices, sizeof(Vector3), 3, NORMAL_BUFFER, normals, "Normals");
+		UploadAttribute(&bufferObject[NORMAL_BUFFER], numVertices, sizeof(Vector3), 3, NORMAL_BUFFER, normals.get(), "Normals");
 	}
 
 	if (tangents) {	//Buffer tangent data
-		UploadAttribute(&bufferObject[TANGENT_BUFFER], numVertices, sizeof(Vector4), 4, TANGENT_BUFFER, tangents, "Tangents");
+		UploadAttribute(&bufferObject[TANGENT_BUFFER], numVertices, sizeof(Vector4), 4, TANGENT_BUFFER, tangents.get(), "Tangents");
 	}
 
 	if (weights) {		//Buffer weights data
-		UploadAttribute(&bufferObject[WEIGHTVALUE_BUFFER], numVertices, sizeof(Vector4), 4, WEIGHTVALUE_BUFFER, weights, "Weights");
+		UploadAttribute(&bufferObject[WEIGHTVALUE_BUFFER], numVertices, sizeof(Vector4), 4, WEIGHTVALUE_BUFFER, weights.get(), "Weights");
 	}
 
 	//Buffer weight indices data...uses a different function since its integers...
 	if (weightIndices) {
 		glGenBuffers(1, &bufferObject[WEIGHTINDEX_BUFFER]);
 		glBindBuffer(GL_ARRAY_BUFFER, bufferObject[WEIGHTINDEX_BUFFER]);
-		glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(int) * 4, weightIndices, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, numVertices * sizeof(int) * 4, weightIndices.get(), GL_STATIC_DRAW);
 		glVertexAttribIPointer(WEIGHTINDEX_BUFFER, 4, GL_INT, 0, 0); //note the new function...
 		glEnableVertexAttribArray(WEIGHTINDEX_BUFFER);
 
@@ -118,7 +109,7 @@ void	Mesh::BufferData()	{
 	if(indices) {
 		glGenBuffers(1, &bufferObject[INDEX_BUFFER]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferObject[INDEX_BUFFER]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices*sizeof(GLuint), indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices*sizeof(GLuint), indices.get(), GL_STATIC_DRAW);
 
 		glObjectLabel(GL_BUFFER, bufferObject[INDEX_BUFFER], -1, "Indices");
 	}
@@ -226,18 +217,18 @@ void ReadJointNames(std::ifstream& file, vector<string>& dest) {
 	}
 }
 
-void ReadRigPose(std::ifstream& file, Matrix4** into) {
+void ReadRigPose(std::ifstream& file, std::unique_ptr<Matrix4[]>& into) {
 	int matCount = 0;
 	file >> matCount;
 
-	*into = new Matrix4[matCount];
+	into.reset(new Matrix4[matCount]);
 
 	for (int i = 0; i < matCount; ++i) {
 		Matrix4 mat;
 		for (int i = 0; i < 16; ++i) {
 			file >> mat.values[i];
 		}
-		(*into)[i] = mat;
+		into[i] = mat;
 	}
 }
 
@@ -320,8 +311,8 @@ Mesh* Mesh::LoadFromMeshFile(const string& name) {
 		case GeometryChunkTypes::VWeightIndices:	ReadTextVertexIndices(file, readWeightIndices, numVertices);  break;
 		case GeometryChunkTypes::JointNames:		ReadJointNames(file, mesh->jointNames);  break;
 		case GeometryChunkTypes::JointParents:		ReadJointParents(file, mesh->jointParents);  break;
-		case GeometryChunkTypes::BindPose:			ReadRigPose(file, &mesh->bindPose);  break;
-		case GeometryChunkTypes::BindPoseInv:		ReadRigPose(file, &mesh->inverseBindPose);  break;
+		case GeometryChunkTypes::BindPose:			ReadRigPose(file, mesh->bindPose);  break;
+		case GeometryChunkTypes::BindPoseInv:		ReadRigPose(file, mesh->inverseBindPose);  break;
 		case GeometryChunkTypes::SubMeshes: 		ReadSubMeshes(file, numMeshes, mesh->meshLayers); break;
 		case GeometryChunkTypes::SubMeshNames: 		ReadSubMeshNames(file, numMeshes, mesh->layerNames); break;
 		}
@@ -332,42 +323,42 @@ Mesh* Mesh::LoadFromMeshFile(const string& name) {
 	mesh->numIndices	= numIndices;
 
 	if (!readPositions.empty()) {
-		mesh->vertices = new Vector3[numVertices];
-		memcpy(mesh->vertices, readPositions.data(), numVertices * sizeof(Vector3));
+		mesh->vertices.reset(new Vector3[numVertices]);
+		memcpy(mesh->vertices.get(), readPositions.data(), numVertices * sizeof(Vector3));
 	}
 
 	if (!readColours.empty()) {
-		mesh->colours = new Vector4[numVertices];
-		memcpy(mesh->colours, readColours.data(), numVertices * sizeof(Vector4));
+		mesh->colours.reset(new Vector4[numVertices]);
+		memcpy(mesh->colours.get(), readColours.data(), numVertices * sizeof(Vector4));
 	}
 
 	if (!readNormals.empty()) {
-		mesh->normals = new Vector3[numVertices];
-		memcpy(mesh->normals, readNormals.data(), numVertices * sizeof(Vector3));
+		mesh->normals.reset(new Vector3[numVertices]);
+		memcpy(mesh->normals.get(), readNormals.data(), numVertices * sizeof(Vector3));
 	}
 
 	if (!readTangents.empty()) {
-		mesh->tangents = new Vector4[numVertices];
-		memcpy(mesh->tangents, readTangents.data(), numVertices * sizeof(Vector4));
+		mesh->tangents.reset(new Vector4[numVertices]);
+		memcpy(mesh->tangents.get(), readTangents.data(), numVertices * sizeof(Vector4));
 	}
 
 	if (!readUVs.empty()) {
-		mesh->textureCoords = new Vector2[numVertices];
-		memcpy(mesh->textureCoords, readUVs.data(), numVertices * sizeof(Vector2));
+		mesh->textureCoords.reset(new Vector2[numVertices]);
+		memcpy(mesh->textureCoords.get(), readUVs.data(), numVertices * sizeof(Vector2));
 	}
 	if (!readIndices.empty()) {
-		mesh->indices = new unsigned int[numIndices];
-		memcpy(mesh->indices, readIndices.data(), numIndices * sizeof(unsigned int));
+		mesh->indices.reset(new unsigned int[numIndices]);
+		memcpy(mesh->indices.get(), readIndices.data(), numIndices * sizeof(unsigned int));
 	}
 
 	if (!readWeights.empty()) {
-		mesh->weights = new Vector4[numVertices];
-		memcpy(mesh->weights, readWeights.data(), numVertices * sizeof(Vector4));
+		mesh->weights.reset(new Vector4[numVertices]);
+		memcpy(mesh->weights.get(), readWeights.data(), numVertices * sizeof(Vector4));
 	}
 
 	if (!readWeightIndices.empty()) {
-		mesh->weightIndices = new int[numVertices * 4];
-		memcpy(mesh->weightIndices, readWeightIndices.data(), numVertices * sizeof(int) * 4);
+		mesh->weightIndices.reset(new int[numVertices * 4]);
+		memcpy(mesh->weightIndices.get(), readWeightIndices.data(), numVertices * sizeof(int) * 4);
 	}
 
 	mesh->BufferData();
@@ -420,7 +411,7 @@ void Mesh::GenerateNormals()
 {
 	if (!normals)
 	{
-		normals = new Vector3[numVertices];
+		normals.reset(new Vector3[numVertices]);
 	}
 	for (GLuint i = 0; i < numVertices; i++)
 	{
@@ -469,7 +460,7 @@ void Mesh::GenerateTangents()
 	if (!textureCoords) return;
 	if (!tangents)
 	{
-		tangents = new Vector4[numVertices];
+		tangents.reset(new Vector4[numVertices]);
 	}
 	for (GLuint i = 0; i < numVertices; i++)
 	{
@@ -536,23 +527,23 @@ float Mesh::CalculateMaxRadius()
 Mesh* Mesh::GenerateTriangle()
 {
 	Mesh * m = new Mesh ();
-	m -> numVertices = 3;
-	m -> vertices = new Vector3 [m -> numVertices ];
-	m -> vertices [0] = Vector3 (0.0f , 0.5f , 0.0f );
-	m -> vertices [1] = Vector3 (0.5f , -0.5f , 0.0f );
-	m -> vertices [2] = Vector3 ( -0.5f , -0.5f , 0.0f );
+	m->numVertices = 3;
+	m->vertices.reset(new Vector3 [m->numVertices]);
+	m->vertices[0] = Vector3(0.0f, 0.5f, 0.0f);
+	m->vertices[1] = Vector3(0.5f, -0.5f, 0.0f);
+	m->vertices[2] = Vector3(-0.5f, -0.5f, 0.0f);
 
-	m -> colours = new Vector4 [m -> numVertices ];
-	m -> colours [0] = Vector4 (1.0f , 0.0f , 0.0f ,1.0f );
-	m -> colours [1] = Vector4 (0.0f , 1.0f , 0.0f ,1.0f );
-	m -> colours [2] = Vector4 (0.0f , 0.0f , 1.0f ,1.0f );
+	m->colours.reset(new Vector4 [m->numVertices]);
+	m->colours [0] = Vector4(1.0f, 0.0f, 0.0f, 1.0f);
+	m->colours [1] = Vector4(0.0f, 1.0f, 0.0f, 1.0f);
+	m->colours [2] = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
 
-	m->textureCoords = new  Vector2[m->numVertices];
+	m->textureCoords.reset(new Vector2[m->numVertices]);
 	m->textureCoords[0] = Vector2(0.5f, 0.0f);
 	m->textureCoords[1] = Vector2(1.0f, 1.0f);
 	m->textureCoords[2] = Vector2(0.0f, 1.0f);
 
-	m -> BufferData ();
+	m->BufferData ();
 	return m ; 
 }
 
@@ -562,11 +553,11 @@ Mesh* Mesh::GenerateQuad()
 	m->numVertices = 4;
 	m->type = GL_TRIANGLE_STRIP;
 	
-	m->vertices = new Vector3[m->numVertices];
-	m->textureCoords = new Vector2[m->numVertices];
-	m->colours = new Vector4[m->numVertices];
-	m->normals = new Vector3[m->numVertices];
-	m->tangents = new Vector4[m->numVertices];
+	m->vertices.reset(new Vector3[m->numVertices]);
+	m->textureCoords.reset(new Vector2[m->numVertices]);
+	m->colours.reset(new Vector4[m->numVertices]);
+	m->normals.reset(new Vector3[m->numVertices]);
+	m->tangents.reset(new Vector4[m->numVertices]);
 	
 	m->vertices[0] = Vector3(-1.0f, 1.0f, 0.0f);
 	m->vertices[1] = Vector3(-1.0f, -1.0f, 0.0f);

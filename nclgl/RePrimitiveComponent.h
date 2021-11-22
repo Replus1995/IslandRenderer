@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 #include "ReFrustumObject.h"
 #include "ReNodeComponent.h"
 #include "RePrimitive.h"
@@ -6,7 +7,7 @@
 class RePrimitiveComponent : public ReNodeComponent, public ReFrustumObject
 {
 public:
-	RePrimitiveComponent(RePrimitivePtr InPrimitive);
+	RePrimitiveComponent(const RePrimitivePtr& InPrimitive);
 	virtual ~RePrimitiveComponent();
 
 	// Component Api//

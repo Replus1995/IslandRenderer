@@ -1,11 +1,10 @@
 #include "RePrimitive.h"
 
-RePrimitive::RePrimitive(std::shared_ptr<Mesh> InMesh, bool InTransparent, ReMaterialPtr InMaterial, ReMaterialParamPtr InMaterialParam)
+RePrimitive::RePrimitive(std::shared_ptr<Mesh> InMesh, bool InTransparent, ReMaterialPtr InMaterial)
 	: mMesh(InMesh)
 	, mTransparent(InTransparent)
 	, mBoundingRadius(1.0f)
 	, mMaterial(InMaterial)
-	, mMaterialParam(InMaterialParam)
 {
 	//CalculateBoundingRadius();
 }
@@ -25,7 +24,7 @@ void RePrimitive::CalculateBoundingRadius()
 void RePrimitive::UpdateMaterialParams()
 {
 	if (mMaterial)
-		mMaterial->SetMaterialParam(mMaterialParam);
+		mMaterial->UpdateRenderParam();
 }
 
 void RePrimitive::DrawMesh()

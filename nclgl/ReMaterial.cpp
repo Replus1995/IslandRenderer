@@ -42,18 +42,44 @@ void ReMaterial::DeleteAllShaders()
 	Shader::allShaders.shrink_to_fit();
 }
 
-void ReMaterial::SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex) const
+
+
+void ReMaterial::SetTextureRepeating(GLuint TargetTex, bool Repeating)
+{
+	glBindTexture(GL_TEXTURE_2D, TargetTex);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, Repeating ? GL_REPEAT : GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, Repeating ? GL_REPEAT : GL_CLAMP);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void ReMaterial::SetShaderBool(const std::string& ParamName, bool InValue) const
 {
 	if (!mShader) return;
-	glUniform1i(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InTexIndex);
-	glActiveTexture(GL_TEXTURE0 + InTexIndex);
-	glBindTexture(GL_TEXTURE_2D, InTexture);
+	glUniform1ui(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InValue);
+}
 
+void ReMaterial::SetShaderInt(const std::string& ParamName, int InValue) const
+{
+	if (!mShader) return;
+	glUniform1i(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InValue);
+}
+
+void ReMaterial::SetShaderUInt(const std::string& ParamName, unsigned int InValue) const
+{
+	if (!mShader) return;
+	glUniform1ui(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InValue);
+}
+
+void ReMaterial::SetShaderFloat(const std::string& ParamName, float InValue) const
+{
+	if (!mShader) return;
+	glUniform1f(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InValue);
 }
 
 void ReMaterial::SetShaderVector2(const std::string& ParamName, const Vector2& InVector) const
 {
-	glUniform2f(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InVector.x, InVector.y);
+	if (!mShader) return;
+	glUniform2fv(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), 1, (float*)&InVector);
 }
 
 void ReMaterial::SetShaderVector3(const std::string& ParamName, const Vector3& InVector) const
@@ -62,9 +88,23 @@ void ReMaterial::SetShaderVector3(const std::string& ParamName, const Vector3& I
 	glUniform3fv(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), 1, (float*)&InVector);
 }
 
-void ReMaterial::SetShaderMatrix(const std::string& ParamName, const Matrix4& InMatrix) const
+void ReMaterial::SetShaderVector4(const std::string& ParamName, const Vector4& InVector) const
+{
+	if (!mShader) return;
+	glUniform4fv(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), 1, (float*)&InVector);
+}
+
+void ReMaterial::SetShaderMatrix4(const std::string& ParamName, const Matrix4& InMatrix) const
 {
 	if (!mShader) return;
 	glUniformMatrix4fv(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), 1, false, InMatrix.values);
 }
 
+void ReMaterial::SetShaderTexture2D(const std::string& ParamName, GLuint InTexture, GLuint InTexIndex) const
+{
+	if (!mShader) return;
+	glUniform1i(glGetUniformLocation(mShader->GetProgram(), ParamName.c_str()), InTexIndex);
+	glActiveTexture(GL_TEXTURE0 + InTexIndex);
+	glBindTexture(GL_TEXTURE_2D, InTexture);
+
+}

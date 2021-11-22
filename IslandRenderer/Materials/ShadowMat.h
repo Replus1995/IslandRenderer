@@ -11,5 +11,5 @@ public:
 	};
 	~ShadowMat() {};
 
-	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam) {};
+	virtual void UpdateRenderParam() {};
 };

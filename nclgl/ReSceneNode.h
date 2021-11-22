@@ -12,7 +12,7 @@ class ReSceneNode
 {
 public:
 	ReSceneNode();
-	~ReSceneNode(void);
+	virtual ~ReSceneNode(void);
 
 	void AddChild(std::shared_ptr<ReSceneNode> NewChild);
 	std::shared_ptr<ReSceneNode> GetChild(unsigned int Index);

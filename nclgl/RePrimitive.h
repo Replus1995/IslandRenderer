@@ -5,7 +5,7 @@
 class RePrimitive
 {
 public:
-	RePrimitive(std::shared_ptr<Mesh> InMesh, bool InTransparent, ReMaterialPtr InMaterial, ReMaterialParamPtr InMaterialParam);
+	RePrimitive(std::shared_ptr<Mesh> InMesh, bool InTransparent, ReMaterialPtr InMaterial);
 	virtual ~RePrimitive();
 
 	std::shared_ptr<Mesh> GetMesh() { return mMesh; };
@@ -25,7 +25,6 @@ protected:
 	std::shared_ptr<Mesh> mMesh;
 	float mBoundingRadius;
 	ReMaterialPtr mMaterial;
-	ReMaterialParamPtr mMaterialParam;
 };
 
 typedef std::shared_ptr<RePrimitive> RePrimitivePtr;

@@ -1,6 +1,6 @@
 #include "RePrimitiveComponent.h"
 
-RePrimitiveComponent::RePrimitiveComponent(RePrimitivePtr InPrimitive)
+RePrimitiveComponent::RePrimitiveComponent(const RePrimitivePtr& InPrimitive)
 	: mPrimitive(InPrimitive)
 {
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <string>
 
 class RePrimitive;
 class ReMaterialLibrary;
@@ -13,7 +14,6 @@ public:
 
 	void ReadPrimitivesFromDisk();
 	std::shared_ptr<RePrimitive> GetPrimitive(unsigned int Index) const;
-
 private:
 	std::vector<std::shared_ptr<RePrimitive>> mPrimitives;
 };
@@ -25,6 +25,7 @@ enum PrimitiveIndex : unsigned int
 	PRI_DIRECT_LIGHT,
 	PRI_POINT_LIGHT,
 	PRI_HEIGHT_MAP,
+	PRI_WATER,
 	PRI_CUBE,
 	PRI_MAX
 };

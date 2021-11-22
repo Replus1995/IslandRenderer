@@ -64,10 +64,6 @@ void Renderer::UpdateScene(float msec)
 {
 	mCamera->UpdateCamera(msec);
 	mSceneRoot->Update(msec);
-
-	
-	//mFrustum->FromMatrix(projMatrix * viewMatrix);
-
 }
 
 void Renderer::RenderScene()	{
@@ -265,7 +261,7 @@ void Renderer::DrawSceneBuffer()
 	mPrimFilter->SortPrimitives();
 
 	DrawQpaque();
-	//DrawTransparent(true);
+	DrawTransparent();
 
 	mPrimFilter->ClearPrimitives();
 

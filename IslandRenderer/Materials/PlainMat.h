@@ -7,10 +7,10 @@ public:
 	PlainMat()
 		: ReMaterial("Material_Plain")
 	{
-		LoadShader("BumpVertex.glsl", "Plain_BufferFragment.glsl");
+		LoadShader("CommonVertex.glsl", "PlainFragment.glsl");
 	};
 	~PlainMat() {};
 
-	virtual void SetMaterialParam(const ReMaterialParamPtr& InParam) {};
+	virtual void UpdateRenderParam() {};
 
 };

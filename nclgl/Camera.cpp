@@ -20,7 +20,7 @@ void  Camera::UpdateCamera(float dt)
 	Matrix4  rotation = Matrix4::Rotation(yaw, Vector3(0, 1, 0));
 	Vector3  forward = rotation * Vector3(0, 0, -1);
 	Vector3  right = rotation * Vector3(1, 0, 0);
-	float  speed = 30.0f * dt;
+	float  speed = speedFactor * dt;
 
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_W)) 
 	{        
@@ -46,6 +46,16 @@ void  Camera::UpdateCamera(float dt)
 	if (Window::GetKeyboard()->KeyDown(KEYBOARD_SPACE)) 
 	{
 		position.y -= speed;
+	}
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_UP))
+	{
+		speedFactor += 20;
+		speedFactor = speedFactor > 160 ? 160 : speedFactor;
+	}
+	if (Window::GetKeyboard()->KeyDown(KEYBOARD_DOWN))
+	{
+		speedFactor -= 20;
+		speedFactor = speedFactor < 60 ? 60 : speedFactor;
 	}
 }
 

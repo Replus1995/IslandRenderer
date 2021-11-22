@@ -48,7 +48,7 @@ public:
 	};
 
 	Mesh(void);
-	~Mesh(void);
+	virtual ~Mesh(void);
 
 	void Draw();
 	void DrawSubMesh(int i);
@@ -70,11 +70,11 @@ public:
 	int GetParentForJoint(int i) const;
 
 	const Matrix4* GetBindPose() const {
-		return bindPose;
+		return bindPose.get();
 	}
 
 	const Matrix4* GetInverseBindPose() const {
-		return inverseBindPose;
+		return inverseBindPose.get();
 	}
 
 	int		GetSubMeshCount() const {
@@ -108,19 +108,19 @@ protected:
 	
 	GLuint	type;
 
-	Vector3*		vertices;
-	Vector4*		colours;
-	Vector2*		textureCoords;
-	Vector3*		normals;
-	Vector4*		tangents;
+	std::unique_ptr<Vector3[]>		vertices;
+	std::unique_ptr<Vector4[]>		colours;
+	std::unique_ptr<Vector2[]>		textureCoords;
+	std::unique_ptr<Vector3[]>		normals;
+	std::unique_ptr<Vector4[]>		tangents;
 
-	Vector4*		weights;
-	int*			weightIndices;
+	std::unique_ptr<Vector4[]>		weights;
+	std::unique_ptr<int[]>			weightIndices;
 
-	unsigned int*	indices;
+	std::unique_ptr<unsigned int[]>	indices;
 
-	Matrix4* bindPose;
-	Matrix4* inverseBindPose;
+	std::unique_ptr<Matrix4[]>		bindPose;
+	std::unique_ptr<Matrix4[]>		inverseBindPose;
 
 	std::vector<std::string>	jointNames;
 	std::vector<int>			jointParents;

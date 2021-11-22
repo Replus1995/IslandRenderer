@@ -15,6 +15,15 @@
     <Filter Include="ObjectFilter">
       <UniqueIdentifier>{6b3cba63-4b33-4bd2-946a-1b66610af8cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneNode">
+      <UniqueIdentifier>{26cbc644-7f75-4094-8693-04b4ee4da98d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NodeComponent">
+      <UniqueIdentifier>{7d594dea-a95c-4047-9b5e-dbd5b71dc53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLTF">
+      <UniqueIdentifier>{cb7c8090-67af-4305-9f7d-1ac89898b098}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer.cpp">
@@ -38,15 +47,21 @@
     <ClCompile Include="ShadowFilter.cpp">
       <Filter>ObjectFilter</Filter>
     </ClCompile>
+    <ClCompile Include="GLTFPrimitiveMesh.cpp">
+      <Filter>GLTF</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTFLoader.cpp">
+      <Filter>GLTF</Filter>
+    </ClCompile>
+    <ClCompile Include="TinyGLTF.cpp">
+      <Filter>GLTF</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PrimitiveLibrary.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialCollection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Materials\HeightMapMat.h">
@@ -81,6 +96,24 @@
     </ClInclude>
     <ClInclude Include="ShadowFilter.h">
       <Filter>ObjectFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\WaterMat.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="NodeComponent\WaterComponent.h">
+      <Filter>NodeComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\MaterialCollection.h">
+      <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFPrimitiveMesh.h">
+      <Filter>GLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="GLTFLoader.h">
+      <Filter>GLTF</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials\GLTFMat.h">
+      <Filter>Materials</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,8 +1,10 @@
 #include "PrimitiveLibrary.h"
+
 #include "../nclgl/RePrimitive.h"
 #include "../nclgl/HeightMap.h"
 
-#include "MaterialCollection.h"
+#include "Materials/MaterialCollection.h"
+
 
 PrimitiveLibrary::PrimitiveLibrary()
 {
@@ -18,46 +20,55 @@ void PrimitiveLibrary::ReadPrimitivesFromDisk()
 
 	//Combine//
 	ReMaterialPtr Combine_Mat(new CombinMat());
-	RePrimitivePtr Combine_Primitive(new RePrimitive(Quad_Mesh, false, Combine_Mat, nullptr));
+	RePrimitivePtr Combine_Primitive(new RePrimitive(Quad_Mesh, false, Combine_Mat));
 	mPrimitives[PrimitiveIndex::PRI_COMBINE] = Combine_Primitive;
 	//Combine//
 
 	//SkyBox//
-	ReMaterialPtr SkyBox_Mat(new SkyBoxMat());
-	ReMaterialParamPtr SkyBox_MatParam = SkyBoxMatParam::LoadDefault();
-	RePrimitivePtr SkyBox_Primitive(new RePrimitive(Quad_Mesh, false, SkyBox_Mat, SkyBox_MatParam));
+	std::shared_ptr<SkyBoxMat> SkyBox_Mat(new SkyBoxMat());
+	SkyBox_Mat->LoadTextures();
+	RePrimitivePtr SkyBox_Primitive(new RePrimitive(Quad_Mesh, false, SkyBox_Mat));
 	mPrimitives[PrimitiveIndex::PRI_SKY_BOX] = SkyBox_Primitive;
 	//SkyBox//
 
 	//Directional Light//
 	ReMaterialPtr DLight_Mat(new DLightMat());
-	RePrimitivePtr DLight_Primitive(new RePrimitive(Quad_Mesh, false, DLight_Mat, nullptr));
+	RePrimitivePtr DLight_Primitive(new RePrimitive(Quad_Mesh, false, DLight_Mat));
 	mPrimitives[PrimitiveIndex::PRI_DIRECT_LIGHT] = DLight_Primitive;
 	//Directional Light//
 
 	///PointLight Sphere///
 	ReMaterialPtr PointLight_Mat(new PointLightMat());
-	RePrimitivePtr PointLight_Primitive(new RePrimitive(Sphere_Mesh, false, PointLight_Mat, nullptr));
+	RePrimitivePtr PointLight_Primitive(new RePrimitive(Sphere_Mesh, false, PointLight_Mat));
 	mPrimitives[PrimitiveIndex::PRI_POINT_LIGHT] = PointLight_Primitive;
 	///PointLight Sphere///
 
 	///Read HeightMap///
 	//std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"noise.png"));
-	std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"IslandTerrain.png"));
-	ReMaterialPtr HeightMap_Mat(new HeightMapMat());
-	ReMaterialParamPtr HeightMap_MatParam = HeightMapMatParam::LoadDefault();
-	RePrimitivePtr HeightMap_Primitive(new RePrimitive(HeightMap_Mesh, false, HeightMap_Mat, HeightMap_MatParam));
+	std::shared_ptr<HeightMap> HeightMap_Mesh(new HeightMap(TEXTUREDIR"Terrain/Island.png", TEXTUREDIR"Terrain/Island_Colour.png"));
+	std::shared_ptr<HeightMapMat> HeightMap_Mat(new HeightMapMat());
+	HeightMap_Mat->LoadTextures();
+	RePrimitivePtr HeightMap_Primitive(new RePrimitive(HeightMap_Mesh, false, HeightMap_Mat));
 	HeightMap_Primitive->SetBoundingRadius(HeightMap_Mesh->GetHeightmapSize().Length() / 2.0f);
 	mPrimitives[PrimitiveIndex::PRI_HEIGHT_MAP] = HeightMap_Primitive;
 	///Read HeightMap///
 
+	//Water//
+	std::shared_ptr<WaterMat> Water_Mat(new WaterMat());
+	Water_Mat->LoadTextures();
+	RePrimitivePtr Water_Primitive(new RePrimitive(Quad_Mesh, true, Water_Mat));
+	Water_Primitive->SetBoundingRadius(1.0f);
+	mPrimitives[PrimitiveIndex::PRI_WATER] = Water_Primitive;
+	//Water//
+
 	//Test Cube//
 	ReMaterialPtr Plain_Mat(new PlainMat());
-	RePrimitivePtr Cube_Primitive(new RePrimitive(Cube_Mesh, false, Plain_Mat, nullptr));
+	RePrimitivePtr Cube_Primitive(new RePrimitive(Cube_Mesh, false, Plain_Mat));
 	Cube_Primitive->SetBoundingRadius(1.0f);
 	mPrimitives[PrimitiveIndex::PRI_CUBE] = Cube_Primitive;
 	//Test Cube//
 
+	
 }
 
 std::shared_ptr<RePrimitive> PrimitiveLibrary::GetPrimitive(unsigned int Index) const
