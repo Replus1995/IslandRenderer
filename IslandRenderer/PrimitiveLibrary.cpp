@@ -57,17 +57,25 @@ void PrimitiveLibrary::ReadPrimitivesFromDisk()
 	std::shared_ptr<WaterMat> Water_Mat(new WaterMat());
 	Water_Mat->LoadTextures();
 	RePrimitivePtr Water_Primitive(new RePrimitive(Quad_Mesh, true, Water_Mat));
-	Water_Primitive->SetBoundingRadius(1.0f);
+	Water_Primitive->SetBoundingRadius(2.0f);
 	mPrimitives[PrimitiveIndex::PRI_WATER] = Water_Primitive;
 	//Water//
 
-	//Test Cube//
+	//Cube//
 	ReMaterialPtr Plain_Mat(new PlainMat());
 	RePrimitivePtr Cube_Primitive(new RePrimitive(Cube_Mesh, false, Plain_Mat));
 	Cube_Primitive->SetBoundingRadius(1.0f);
 	mPrimitives[PrimitiveIndex::PRI_CUBE] = Cube_Primitive;
-	//Test Cube//
-
+	//Cube//
+	
+	//Cube Emissive//
+	std::shared_ptr<PlainMat> Emissive_Mat(new PlainMat());
+	Emissive_Mat->mBaseColour = Vector4(0.1, 0.2, 0.8, 0.2);
+	Emissive_Mat->mEmissiveColour = Vector3(0.15, 0.4, 0.9);
+	RePrimitivePtr CubeE_Primitive(new RePrimitive(Cube_Mesh, true, Emissive_Mat));
+	CubeE_Primitive->SetBoundingRadius(1.0f);
+	mPrimitives[PrimitiveIndex::PRI_CUBE_EMISSIVE] = CubeE_Primitive;
+	//Cube Emissive//
 	
 }
 

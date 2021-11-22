@@ -16,7 +16,7 @@ in Vertex
 } IN;
 
 //out vec4 fragColour;
-out vec4 fragColour[2];
+out vec4 fragColour[3];
 
 void main(void)
 {
@@ -34,4 +34,6 @@ void main(void)
     //vec3 reflectDir = reflect(-viewDir,normalize(IN.normal));
     //vec4 reflectTex = texture(CubeTex,reflectDir);
     //fragColour = reflectTex + (diffuse * 0.25f);
+
+    fragColour[2] = vec4(0,0,0,1);
 }

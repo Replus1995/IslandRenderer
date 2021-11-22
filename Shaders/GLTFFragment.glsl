@@ -31,7 +31,7 @@ in Vertex
     vec3 worldPos;
 } IN;
 
-out vec4 fragColour[2];
+out vec4 fragColour[3];
 
 void main(void)
 {
@@ -66,5 +66,12 @@ void main(void)
         fragColour[1] = vec4(IN.normal, 1.0f);
     }
 
-    
+    if(bUseEmissiveTex)
+    {
+        fragColour[2] = vec4(texture(emissiveTex, IN.texCoord).rgb * emissiveFactor, 1.0);
+    }
+    else
+    {
+        fragColour[2] = vec4(emissiveFactor, 1.0);
+    }
 }

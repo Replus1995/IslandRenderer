@@ -17,4 +17,5 @@ public:
 protected:
 	static std::shared_ptr<ReSceneNode> GenGLTFNode(const GLTFLoader* InLoader);
 	static void GenTreePositions(std::vector<Matrix4>& OutMatrices);
+	static void GenGrassPositions(std::vector<Matrix4>& OutMatrices);
 };

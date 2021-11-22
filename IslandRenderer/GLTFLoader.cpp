@@ -55,7 +55,8 @@ bool GLTFLoader::LoadFile(const std::string& FileName)
                 NewMaterial = ReMaterialPtr(new PlainMat());
             }
             RePrimitivePtr NewPrimitive(new RePrimitive(tPrimitiveMesh, bTransparent, NewMaterial));
-            NewPrimitive->CalculateBoundingRadius();
+            //NewPrimitive->CalculateBoundingRadius();
+            NewPrimitive->SetBoundingRadius(tPrimitiveMesh->CalculateMaxRadius() * 1.5);
             NewMesh.mPrimitives.push_back(NewPrimitive);
         }
         mMeshes.push_back(NewMesh);
@@ -152,7 +153,7 @@ bool GLTFLoader::LoadTextureData(tinygltf::Image* image, const int image_idx, st
     std::copy(data, data + w * h * comp * (bits / 8), image->image.begin());
     SOIL_free_image_data(data);
 
-    return false;
+    return true;
 }
 
 unsigned int GLTFLoader::LoadGLTFTexture(int InTextureIndex, const tinygltf::Model& InModel)

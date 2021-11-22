@@ -22,7 +22,7 @@ in Vertex
     vec3 worldPos;
 } IN;
 
-out vec4 fragColour[2];
+out vec4 fragColour[3];
 
 void main(void)
 {
@@ -73,5 +73,5 @@ void main(void)
     fragColour[1] = vec4((fragColour[1] * bottomAlpha + vec4(bottomNormal * 0.5 + 0.5, 1.0) * (1-bottomAlpha)).rgb, 1.0f);
     fragColour[1] = vec4(normalize(fragColour[1].xyz),1.0f);
 
-    
+    fragColour[2] = vec4(0, 0, 0, 1);
 }

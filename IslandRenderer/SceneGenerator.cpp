@@ -8,6 +8,7 @@
 #include "../nclgl/Mesh.h"
 #include "../nclgl/HeightMap.h"
 
+#include "SceneNode/UpDownNode.h"
 #include "NodeComponent/WaterComponent.h"
 #include "Materials/MaterialCollection.h"
 
@@ -55,25 +56,51 @@ void SceneGenerator::Build(std::shared_ptr<ReSceneNode> SceneRoot, const Primiti
 
 	
 
-	ReSceneNodePtr TestCube_Node(new ReSceneNode());
-	Ground_Node->AddChild(TestCube_Node);
-	RePrimitiveComponentPtr TestCube_Component(new RePrimitiveComponent(PrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_CUBE)));
-	TestCube_Node->AddComponent(TestCube_Component);
-	TestCube_Node->SetTransform(Matrix4::Translation(Vector3(200.0f, 200.0f, -200.0f)) * Matrix4::Scale(Vector3(30, 30, 30)));
+	ReSceneNodePtr CubeOri_Node(new ReSceneNode());
+	CubeOri_Node->SetTransform(Matrix4::Translation(Vector3(-80.0f, 50.0f, -680.0f)) * Matrix4::Scale(Vector3(20, 20, 20)));
+	Ground_Node->AddChild(CubeOri_Node);
+	ReSceneNodePtr CubeAni_Node(new UpDownNode());
+	CubeOri_Node->AddChild(CubeAni_Node);
+	RePrimitiveComponentPtr Cube_Component(new RePrimitiveComponent(PrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_CUBE_EMISSIVE)));
+	Cube_Component->SetCostShadow(false);
+	CubeAni_Node->AddComponent(Cube_Component);
+	RePointLightComponentPtr CubeLight_Component(new RePointLightComponent(PrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_POINT_LIGHT), Vector4(0.1, 0.3, 0.9, 1), 800.0f));
+	CubeAni_Node->AddComponent(CubeLight_Component);
 
 
-	GLTFLoader tGLTFLoader;
-	tGLTFLoader.LoadFile(MESHDIR"birch_tree.glb");
+	std::unique_ptr<GLTFLoader> tLoader(new GLTFLoader());
+	tLoader->LoadFile(MESHDIR"birch_tree.glb");
 
 	std::vector<Matrix4> TreePositions;
 	GenTreePositions(TreePositions);
 	
 	for (const Matrix4& tTreePosition : TreePositions)
 	{
-		ReSceneNodePtr Tree_Node = GenGLTFNode(&tGLTFLoader);
+		ReSceneNodePtr Tree_Node = GenGLTFNode(tLoader.get());
 		Ground_Node->AddChild(Tree_Node);
 		Tree_Node->SetTransform(tTreePosition * Matrix4::Scale(Vector3(30, 30, 30)));
 	}
+
+
+	tLoader.reset(new GLTFLoader());
+	tLoader->LoadFile(MESHDIR"LP_Grass.glb");
+
+	std::vector<Matrix4> GrassPositions;
+	GenGrassPositions(GrassPositions);
+
+	for (const Matrix4& tGrassPosition : GrassPositions)
+	{
+		ReSceneNodePtr Grass_Node = GenGLTFNode(tLoader.get());
+		Ground_Node->AddChild(Grass_Node);
+		Grass_Node->SetTransform(tGrassPosition * Matrix4::Scale(Vector3(30, 30, 30)) * Matrix4::Rotation(15, Vector3(0, 1, 0)));
+	}
+
+
+	tLoader.reset(new GLTFLoader());
+	tLoader->LoadFile(MESHDIR"rock2.glb");
+	ReSceneNodePtr Rock_Node = GenGLTFNode(tLoader.get());
+	Ground_Node->AddChild(Rock_Node);
+	Rock_Node->SetTransform(Matrix4::Translation(Vector3(-80.0f, -20.0f, -680.0f)) * Matrix4::Scale(Vector3(50, 50, 50)));
 
 	return;
 }
@@ -81,17 +108,53 @@ void SceneGenerator::Build(std::shared_ptr<ReSceneNode> SceneRoot, const Primiti
 std::shared_ptr<ReSceneNode> SceneGenerator::GenGLTFNode(const GLTFLoader* InLoader)
 {
 	ReSceneNodePtr NewNode(new ReSceneNode());
-	for (const RePrimitivePtr& tPrimitive : InLoader->mMeshes[0].mPrimitives)
+	if (InLoader->mMeshes.size() > 0)
 	{
-		RePrimitiveComponentPtr GLTFPriComp(new RePrimitiveComponent(tPrimitive));
-		NewNode->AddComponent(GLTFPriComp);
+		for (const RePrimitivePtr& tPrimitive : InLoader->mMeshes[0].mPrimitives)
+		{
+			RePrimitiveComponentPtr GLTFPriComp(new RePrimitiveComponent(tPrimitive));
+			NewNode->AddComponent(GLTFPriComp);
+		}
 	}
+	else
+	{
+		std::cout << "No mesh found in gltf" << std::endl;
+	}
+	
 	return NewNode;
 }
 
 void SceneGenerator::GenTreePositions(std::vector<Matrix4>& OutMatrices)
 {
 	OutMatrices.push_back(Matrix4::Translation(Vector3(200.0f, 0.0f, -600.0f)));
-	OutMatrices.push_back(Matrix4::Translation(Vector3(220.0f, 0.0f, -650.0f)));
-	OutMatrices.push_back(Matrix4::Translation(Vector3(250.0f, 0.0f, -720.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(310.0f, 0.0f, -620.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(240.0f, 0.0f, -660.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(240.0f, 0.0f, -760.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(180.0f, 0.0f, -810.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(100.0f, 0.0f, -920.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-30.0f, 0.0f, -980.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-100.0f, 0.0f, -975.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-200.0f, 0.0f, -970.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-280.0f, 0.0f, -960.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-350.0f, 0.0f, -980.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-430.0f, 0.0f, -950.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-520.0f, 0.0f, -970.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-530.0f, 0.0f, -900.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-560.0f, 0.0f, -810.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-630.0f, 0.0f, -720.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(-610.0f, 0.0f, -620.0f)));
+	//OutMatrices.push_back(Matrix4::Translation(Vector3(-610.0f, 0.0f, -620.0f)));
+}
+
+void SceneGenerator::GenGrassPositions(std::vector<Matrix4>& OutMatrices)
+{
+	OutMatrices.push_back(Matrix4::Translation(Vector3(160.0f, -10.0f, -10.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(170.0f, -10.0f, 20.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(180.0f, -10.0f, 0.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(200.0f, -10.0f, 25.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(200.0f, -10.0f, 0.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(220.0f, -10.0f, 10.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(230.0f, -10.0f, -10.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(240.0f, -10.0f, -5.0f)));
+	OutMatrices.push_back(Matrix4::Translation(Vector3(250.0f, -10.0f, -20.0f)));
 }

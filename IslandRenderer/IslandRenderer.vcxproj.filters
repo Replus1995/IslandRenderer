@@ -115,5 +115,8 @@
     <ClInclude Include="Materials\GLTFMat.h">
       <Filter>Materials</Filter>
     </ClInclude>
+    <ClInclude Include="SceneNode\UpDownNode.h">
+      <Filter>SceneNode</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -38,7 +38,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mPLightFilter.reset(new PointLightFilter(mCamera, mCamFrustum));
 
 	mDLight.reset(new ReDLight(mPrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_DIRECT_LIGHT)));
-	mDLight->UpdateDLightParam(Vector3(-1, -1, -1).Normalised(), Vector4(1, 1, 1, 1), 0.8f, SceneRadius);
+	mDLight->UpdateDLightParam(Vector3(-1, -1, -1).Normalised(), Vector4(1, 1, 1, 1), 0.9f, SceneRadius);
 	mShadowMat_DLight.reset(new ShadowMat());
 	mShadowFilter_DLight.reset(new ShadowFilter());
 	
@@ -52,6 +52,8 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+
+	bRenderShadow = true;
 
 	init = true;
 }
@@ -70,7 +72,12 @@ void Renderer::RenderScene()	{
 	glClearColor(0.2f,0.2f,0.2f,1.0f);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	DrawShadowBuffer();
+	if (bRenderShadow)
+	{
+		DrawShadowBuffer();
+		bRenderShadow = false;
+	}
+	
 
 	modelMatrix.ToIdentity();
 	viewMatrix = mCamera->BuildViewMatrix();
@@ -218,7 +225,7 @@ void Renderer::DrawSkyBox()
 	UpdateMatrixVP(projMatrix, viewMatrix);
 
 	mSkyBoxPrim->UpdateMaterialParams();
-	mSkyBoxPrim->GetMaterial()->SetShaderTexture2D("sceneTex", mSceneBuffer->mColourTex, 1);
+	mSkyBoxPrim->GetMaterial()->SetShaderTexture2D("sceneTex", mSceneBuffer->mEmissiveTex, 1);
 	mSkyBoxPrim->DrawMesh();
 
 	glDepthMask(GL_TRUE);
@@ -308,6 +315,7 @@ void Renderer::CombineBuffers()
 	CombineMaterial->SetShaderTexture2D("diffuseTex", mSceneBuffer->mColourTex, 0);
 	CombineMaterial->SetShaderTexture2D("diffuseLight", mLightBuffer->mDiffuseTex, 1);
 	CombineMaterial->SetShaderTexture2D("specularLight", mLightBuffer->mSpecularTex, 2);
+	CombineMaterial->SetShaderTexture2D("emissiveTex", mSceneBuffer->mEmissiveTex, 3);
 
 	mCombinePrim->DrawMesh();
 }

@@ -9,5 +9,6 @@ public:
 
 	GLuint mColourTex;
 	GLuint mNormalTex;
+	GLuint mEmissiveTex;
 	GLuint mDepthTex;
 };

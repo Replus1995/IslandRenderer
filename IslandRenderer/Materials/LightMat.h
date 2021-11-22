@@ -21,7 +21,7 @@ public:
 	DLightMat()
 		: ReMaterial("Material_DirectionalLight")
 	{
-		LoadShader("CombineVertex.glsl", "DLightFragment.glsl");
+		LoadShader("QuadVertex.glsl", "DLightFragment.glsl");
 	};
 	~DLightMat() {};
 

@@ -71,6 +71,7 @@ protected:
 	std::unique_ptr<ShadowFilter> mShadowFilter_DLight;
 	Matrix4 mShadowMatrix_DLight;
 
+	bool bRenderShadow;
 	std::unique_ptr<ReShadowBuffer> mShadowBuffer_DLight;
 
 	std::unique_ptr<ReSceneBuffer> mSceneBuffer;

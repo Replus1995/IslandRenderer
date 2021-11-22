@@ -7,7 +7,7 @@ public:
 	CombinMat()
 		: ReMaterial("Material_Combine")
 	{
-		LoadShader("CombineVertex.glsl", "CombineFragment.glsl");
+		LoadShader("QuadVertex.glsl", "CombineFragment.glsl");
 	};
 	~CombinMat() {};
 

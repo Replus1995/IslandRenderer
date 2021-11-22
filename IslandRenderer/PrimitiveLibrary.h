@@ -27,5 +27,6 @@ enum PrimitiveIndex : unsigned int
 	PRI_HEIGHT_MAP,
 	PRI_WATER,
 	PRI_CUBE,
+	PRI_CUBE_EMISSIVE,
 	PRI_MAX
 };
