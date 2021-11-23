@@ -2,7 +2,7 @@
 #include "Renderer.h"
 
 int main()	{
-	Window w("Make your own project!", 1280, 720, false);
+	Window w("Make your own project!", 1920, 1080, false);
 
 	if(!w.HasInitialised()) {
 		return -1;
@@ -22,6 +22,9 @@ int main()	{
 		renderer.SwapBuffers();
 		if (Window::GetKeyboard()->KeyDown(KEYBOARD_F5)) {
 			Shader::ReloadAllShaders();
+		}
+		if (Window::GetKeyboard()->KeyDown(KEYBOARD_L)) {
+			renderer.ToggleDayLoop();
 		}
 	}
 	return 0;

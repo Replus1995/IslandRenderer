@@ -56,6 +56,9 @@
     <ClCompile Include="TinyGLTF.cpp">
       <Filter>GLTF</Filter>
     </ClCompile>
+    <ClCompile Include="DayLooper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renderer.h">
@@ -117,6 +120,9 @@
     </ClInclude>
     <ClInclude Include="SceneNode\UpDownNode.h">
       <Filter>SceneNode</Filter>
+    </ClInclude>
+    <ClInclude Include="DayLooper.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

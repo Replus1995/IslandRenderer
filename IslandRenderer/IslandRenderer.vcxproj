@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DayLooper.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="GLTFPrimitiveMesh.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,6 +151,7 @@
     <ClCompile Include="TinyGLTF.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DayLooper.h" />
     <ClInclude Include="GLTFLoader.h" />
     <ClInclude Include="GLTFPrimitiveMesh.h" />
     <ClInclude Include="Materials\CombineMat.h" />

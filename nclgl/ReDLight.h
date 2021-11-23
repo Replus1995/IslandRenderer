@@ -24,7 +24,10 @@ public:
 		return;
 	};
 
+	float GetStrength() const { return mStrength; };
+	void SetStrength(float InStrength) { mStrength = InStrength; };
 	Vector3 GetDirVector() const { return mDirection; };
+	void SetDirVector(const Vector3& InDir) { mDirection = InDir; };
 	float GetDistance() const { return mDistance; };
 	Vector3 GetPosition() const { return mDirection * mDistance * -1.0f; };
 

@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include <algorithm>
 
+#include "../nclgl/Matrix3.h"
 #include "../nclgl/Camera.h"
 #include "../nclgl/ReFrustum.h"
 #include "../nclgl/ReSceneNode.h"
@@ -15,6 +16,7 @@
 #include "PrimitiveFilter.h"
 #include "PointLightFilter.h"
 #include "ShadowFilter.h"
+#include "DayLooper.h"
 
 #include "Materials/ShadowMat.h"
 
@@ -38,7 +40,11 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mPLightFilter.reset(new PointLightFilter(mCamera, mCamFrustum));
 
 	mDLight.reset(new ReDLight(mPrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_DIRECT_LIGHT)));
-	mDLight->UpdateDLightParam(Vector3(-1, -1, -1).Normalised(), Vector4(1, 1, 1, 1), 0.9f, SceneRadius);
+	Vector3 tDLightDir = Matrix3::Rotation(-60, Vector3(0, 0, 1)) * Vector3(0, -1, 0);
+	mDLight->UpdateDLightParam(tDLightDir, Vector4(1, 1, 1, 1), 0.9f, SceneRadius);
+
+	mDayLooper.reset(new DayLooper(mDLight));
+
 	mShadowMat_DLight.reset(new ShadowMat());
 	mShadowFilter_DLight.reset(new ShadowFilter());
 	
@@ -66,6 +72,13 @@ void Renderer::UpdateScene(float msec)
 {
 	mCamera->UpdateCamera(msec);
 	mSceneRoot->Update(msec);
+
+	if (bEnableDayLoop)
+	{
+		mDayLooper->UpdateDaylight(msec);
+		bRenderShadow = true;
+	}
+	
 }
 
 void Renderer::RenderScene()	{

@@ -18,6 +18,8 @@ class ShadowFilter;
 class PrimitiveFilter;
 class PointLightFilter;
 
+class DayLooper;
+
 class Renderer : public OGLRenderer	{
 public:
 	Renderer(Window &parent);
@@ -25,6 +27,8 @@ public:
 
 	 void UpdateScene(float msec) override;
 	 void RenderScene()	override;
+
+	 void ToggleDayLoop() { bEnableDayLoop = !bEnableDayLoop; };
 	 
 protected:
 	int TryBindShader(Shader* NewShader);
@@ -66,11 +70,13 @@ protected:
 	std::unique_ptr<PrimitiveFilter> mPrimFilter;
 	std::unique_ptr<PointLightFilter> mPLightFilter;
 
-	std::unique_ptr<ReDLight> mDLight;
+	std::shared_ptr<ReDLight> mDLight;
+	bool bEnableDayLoop = false;
+	std::unique_ptr<DayLooper> mDayLooper;
+
 	std::shared_ptr<ReMaterial> mShadowMat_DLight;
 	std::unique_ptr<ShadowFilter> mShadowFilter_DLight;
 	Matrix4 mShadowMatrix_DLight;
-
 	bool bRenderShadow;
 	std::unique_ptr<ReShadowBuffer> mShadowBuffer_DLight;
 
