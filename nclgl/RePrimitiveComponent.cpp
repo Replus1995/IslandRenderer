@@ -14,6 +14,11 @@ bool RePrimitiveComponent::IsTransparent() const
 	return mPrimitive ? mPrimitive->IsTransparent() : false;
 }
 
+bool RePrimitiveComponent::IsInstanced() const
+{
+	return mPrimitive ? mPrimitive->IsInstanced() : false;
+}
+
 void RePrimitiveComponent::Draw(bool bUseMaterial)
 {
 	if (!mPrimitive) return;

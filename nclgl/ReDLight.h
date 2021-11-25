@@ -23,7 +23,8 @@ public:
 		mDistance = InDistance;
 		return;
 	};
-
+	Vector4 GetColour() const { return mColour; };
+	void SetColour(const Vector4& InColour) { mColour = InColour; };
 	float GetStrength() const { return mStrength; };
 	void SetStrength(float InStrength) { mStrength = InStrength; };
 	Vector3 GetDirVector() const { return mDirection; };

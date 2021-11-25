@@ -31,7 +31,7 @@ in Vertex
     vec3 worldPos;
 } IN;
 
-out vec4 fragColour[3];
+out vec4 fragColour[4];
 
 void main(void)
 {
@@ -74,4 +74,18 @@ void main(void)
     {
         fragColour[2] = vec4(emissiveFactor, 1.0);
     }
+
+    fragColour[3].r = metallic;
+    fragColour[3].g = roughness;
+    if(bUseMetallicRoughnessTex)
+    {
+        fragColour[3].r *= texture(metallicRoughnessTex, IN.texCoord).b;
+        fragColour[3].g *= texture(metallicRoughnessTex, IN.texCoord).g; 
+    }
+    fragColour[3].b = occlutionStrength;
+    if(bUseOcclutionTex)
+    {
+        fragColour[3].b *= texture(occlutionTex, IN.texCoord).r;
+    }
+    fragColour[3].a = 1.0;
 }

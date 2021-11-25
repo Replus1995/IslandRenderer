@@ -52,6 +52,7 @@ public:
 
 	void Draw();
 	void DrawSubMesh(int i);
+	void DrawInstanced(unsigned int num);
 
 	static Mesh* LoadFromMeshFile(const std::string& name);
 
@@ -77,7 +78,7 @@ public:
 		return inverseBindPose.get();
 	}
 
-	int		GetSubMeshCount() const {
+	int GetSubMeshCount() const {
 		return (int)meshLayers.size(); 
 	}
 

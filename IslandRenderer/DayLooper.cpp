@@ -15,7 +15,7 @@ void DayLooper::UpdateDaylight(float msec)
 	{
 		NextAngle += -150.0f;
 		float CurStrength = mDayLight->GetStrength();
-		mDayLight->SetStrength(CurStrength > 0.5 ? 0.1 : 0.8);
+		mDayLight->SetStrength(CurStrength > 0.5 ? 0.1 : 0.9);
 	}
 	Vector3 tDLightDir = Matrix3::Rotation(NextAngle, Vector3(0, 0, 1)) * Vector3(0, -1, 0);
 	mDayLight->SetDirVector(tDLightDir);

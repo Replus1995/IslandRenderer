@@ -7,7 +7,7 @@
 class RePointLightComponent : public ReNodeComponent, public ReFrustumObject
 {
 public:
-	RePointLightComponent(RePrimitivePtr InPrim, const Vector4& InColour, const float InRadius);
+	RePointLightComponent(const RePrimitivePtr& InPrim, const Vector4& InColour, const float InRadius);
 	virtual ~RePointLightComponent();
 
 	// Component Api//

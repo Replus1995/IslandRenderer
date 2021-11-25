@@ -28,5 +28,6 @@ enum PrimitiveIndex : unsigned int
 	PRI_WATER,
 	PRI_CUBE,
 	PRI_CUBE_EMISSIVE,
+	PRI_FIREFLY,
 	PRI_MAX
 };

@@ -19,6 +19,7 @@ class PrimitiveFilter;
 class PointLightFilter;
 
 class DayLooper;
+class CameraRoute;
 
 class Renderer : public OGLRenderer	{
 public:
@@ -29,6 +30,7 @@ public:
 	 void RenderScene()	override;
 
 	 void ToggleDayLoop() { bEnableDayLoop = !bEnableDayLoop; };
+	 void ToggleCameraRoute();
 	 
 protected:
 	int TryBindShader(Shader* NewShader);
@@ -39,6 +41,8 @@ protected:
 	void DrawQpaque();
 	void DrawTransparent();
 	void DrawPrimitive(const std::shared_ptr<RePrimitiveComponent>& Primitive, bool bUseMaterial);
+	void DrawInstanced();
+	void DrawPrimitiveIntanced(const std::shared_ptr<RePrimitive>& Primitive, const std::vector<Matrix4>& ModelMatrices, bool bUseMaterial);
 
 	void DrawShadowOpaque_DLight();
 
@@ -48,12 +52,12 @@ protected:
 	void DrawPointLights();
 	void DrawPointLight(const std::shared_ptr<RePointLightComponent>& PointLight);
 
-	void DrawSkyBox();
-	
 	void DrawShadowBuffer();
 	void DrawSceneBuffer();
 	void DrawLightBuffer();
 	void CombineBuffers();
+
+	void DrawSkyBox();
 
 protected:
 	const int ShadowSize = 4096;
@@ -63,6 +67,8 @@ protected:
 
 	std::shared_ptr<Camera> mCamera;
 	Matrix4 mProjMatrix_Cam;
+	bool bUseCamRoute;
+	std::unique_ptr<CameraRoute> mCamRoute;
 
 	std::shared_ptr<ReSceneNode> mSceneRoot;
 

@@ -16,7 +16,7 @@ in Vertex
 } IN;
 
 //out vec4 fragColour;
-out vec4 fragColour[3];
+out vec4 fragColour[4];
 
 void main(void)
 {
@@ -28,7 +28,7 @@ void main(void)
 
     fragColour[0] = vec4(diffuse.rgb, 0.3f);
     //fragColour[0] = vec4(1,1,1,1);
-    fragColour[1] = vec4(normal * 0.5 + 0.5, 1.0f);
+    fragColour[1] = vec4(normal * 0.5 + 0.5, 0.3f);
 
     //vec3 viewDir = normalize(cameraPos - IN.worldPos);
     //vec3 reflectDir = reflect(-viewDir,normalize(IN.normal));
@@ -36,4 +36,5 @@ void main(void)
     //fragColour = reflectTex + (diffuse * 0.25f);
 
     fragColour[2] = vec4(0,0,0,1);
+    fragColour[3] = vec4(0.0, 0.5, 1.0, 1.0);
 }

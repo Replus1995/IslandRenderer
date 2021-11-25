@@ -5,10 +5,13 @@
 
 uniform sampler2D grassColor;
 uniform sampler2D grassNorm;
+
 uniform sampler2D sandColor;
 uniform sampler2D sandNorm;
+
 uniform sampler2D cliffColor;
 uniform sampler2D cliffNorm;
+
 uniform sampler2D bottomColor;
 uniform sampler2D bottomNorm;
 
@@ -22,7 +25,7 @@ in Vertex
     vec3 worldPos;
 } IN;
 
-out vec4 fragColour[3];
+out vec4 fragColour[4];
 
 void main(void)
 {
@@ -74,4 +77,5 @@ void main(void)
     fragColour[1] = vec4(normalize(fragColour[1].xyz),1.0f);
 
     fragColour[2] = vec4(0, 0, 0, 1);
+    fragColour[3] = vec4(0, 1, 1.0, 1.0);
 }

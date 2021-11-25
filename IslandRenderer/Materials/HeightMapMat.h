@@ -35,14 +35,14 @@ public:
 
 	void LoadTextures()
 	{
-		GrassColor = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Grass/GrassColor.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		GrassNorm = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Grass/GrassNormal.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		SandColor = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Sand/SandColor.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		SandNorm = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Sand/SandNormal.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		CliffColor = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Rock/RockColor.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		CliffNorm = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Rock/RockNormal.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		BottomColor = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Pebbles/PebblesColor.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		BottomNorm = SOIL_load_OGL_texture(TEXTUREDIR"Terrain/Pebbles/PebblesNormal.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+		GrassColor = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Grass/GrassColor.jpg", true);
+		GrassNorm = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Grass/GrassNormal.jpg", true);
+		SandColor = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Sand/SandColor.png", true);
+		SandNorm = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Sand/SandNormal.png", true);
+		CliffColor = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Rock/RockColor.png", true);
+		CliffNorm = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Rock/RockNormal.png", true);
+		BottomColor = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Pebbles/PebblesColor.png", true);
+		BottomNorm = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"Terrain/Pebbles/PebblesNormal.png", true);
 
 		SetTextureRepeating(GrassColor, true);
 		SetTextureRepeating(GrassNorm, true);

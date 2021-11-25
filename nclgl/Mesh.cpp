@@ -37,7 +37,7 @@ void Mesh::Draw()	{
 	else{
 		glDrawArrays(type, 0, numVertices);
 	}
-	glBindVertexArray(0);	
+	glBindVertexArray(0);
 }
 
 void Mesh::DrawSubMesh(int i) {
@@ -53,6 +53,18 @@ void Mesh::DrawSubMesh(int i) {
 	}
 	else {
 		glDrawArrays(type, m.start, m.count);	//Draw the triangle!
+	}
+	glBindVertexArray(0);
+}
+
+void Mesh::DrawInstanced(unsigned int num)
+{
+	glBindVertexArray(arrayObject);
+	if (bufferObject[INDEX_BUFFER]) {
+		glDrawElementsInstanced(type, numIndices, GL_UNSIGNED_INT, 0, num);
+	}
+	else {
+		glDrawArraysInstanced(type, 0, numVertices, num);
 	}
 	glBindVertexArray(0);
 }

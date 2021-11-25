@@ -4,15 +4,13 @@
 #include "GLTFPrimitiveMesh.h"
 #include "Materials/MaterialCollection.h"
 
-bool GLTFLoader::LoadFile(const std::string& FileName)
+bool GLTFLoader::LoadFile(const std::string& FileName, bool Instanced)
 {
     tinygltf::TinyGLTF tLoader;
     tinygltf::Model tModel;
     std::string ErrStr;
     std::string WarnStr;
     std::string Extension = GetFilePathExtension(FileName);
-
-    tLoader.SetImageLoader(GLTFLoader::LoadTextureData, nullptr);
 
     bool LoadRes = true;
     if (Extension == "gltf")
@@ -34,7 +32,7 @@ bool GLTFLoader::LoadFile(const std::string& FileName)
         std::cout << "GLTF load warning: " << WarnStr << std::endl;
 
     std::vector<std::shared_ptr<GLTFMat>> GLTFMaterials;
-    LoadGLTFMaterials(GLTFMaterials,tModel);
+    LoadGLTFMaterials(GLTFMaterials, tModel, Instanced);
 
     for (const tinygltf::Mesh tMesh : tModel.meshes)
     {
@@ -45,7 +43,7 @@ bool GLTFLoader::LoadFile(const std::string& FileName)
             tPrimitiveMesh->LoadPrimitive(tPrimitive, tModel);
             ReMaterialPtr NewMaterial;
             bool bTransparent = false;
-            if (tPrimitiveMesh->mMaterialIndex >=0 && tPrimitiveMesh->mMaterialIndex < GLTFMaterials.size())
+            if (tPrimitiveMesh->mMaterialIndex >= 0 && tPrimitiveMesh->mMaterialIndex < GLTFMaterials.size())
             {
                 NewMaterial = GLTFMaterials[tPrimitiveMesh->mMaterialIndex];
                 bTransparent = GLTFMaterials[tPrimitiveMesh->mMaterialIndex]->mAlphaMode == GLTF_AM_BLEND;
@@ -54,8 +52,7 @@ bool GLTFLoader::LoadFile(const std::string& FileName)
             {
                 NewMaterial = ReMaterialPtr(new PlainMat());
             }
-            RePrimitivePtr NewPrimitive(new RePrimitive(tPrimitiveMesh, bTransparent, NewMaterial));
-            //NewPrimitive->CalculateBoundingRadius();
+            RePrimitivePtr NewPrimitive(new RePrimitive(tPrimitiveMesh, NewMaterial, bTransparent, Instanced));
             NewPrimitive->SetBoundingRadius(tPrimitiveMesh->CalculateMaxRadius() * 1.5);
             NewMesh.mPrimitives.push_back(NewPrimitive);
         }
@@ -72,90 +69,6 @@ std::string GLTFLoader::GetFilePathExtension(const std::string& FileName)
     return "";
 }
 
-bool GLTFLoader::LoadTextureData(tinygltf::Image* image, const int image_idx, std::string* err, std::string* warn, int req_width, int req_height, const unsigned char* bytes, int size, void* userdata)
-{
-    (void)warn;
-
-    struct LoadTextureDataOption
-    {
-        // true: preserve image channels(e.g. load as RGB image if the image has RGB channels)
-        // default `false`(channels are expanded to RGBA for backward compatiblity).
-        bool preserve_channels{ false };
-
-    } option;
-
-    if (userdata) {
-        option = *reinterpret_cast<LoadTextureDataOption*>(userdata);
-    }
-
-    int w = 0, h = 0, comp = 0, req_comp = 0;
-    unsigned char* data = nullptr;
-
-    req_comp = option.preserve_channels ? 0 : 4;
-    int bits = 8;
-    int pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
-
-    data = SOIL_load_image_from_memory(bytes, size, &w, &h, &comp, req_comp);
-    if (!data) {
-        // NOTE: you can use `warn` instead of `err`
-        if (err) {
-            (*err) +=
-                "Unknown image format. STB cannot decode image data for image[" +
-                std::to_string(image_idx) + "] name = \"" + image->name + "\".\n";
-        }
-        return false;
-    }
-
-    if ((w < 1) || (h < 1)) {
-        SOIL_free_image_data(data);
-        if (err) {
-            (*err) += "Invalid image data for image[" + std::to_string(image_idx) +
-                "] name = \"" + image->name + "\"\n";
-        }
-        return false;
-    }
-
-    if (req_width > 0) {
-        if (req_width != w) {
-            SOIL_free_image_data(data);
-            if (err) {
-                (*err) += "Image width mismatch for image[" +
-                    std::to_string(image_idx) + "] name = \"" + image->name +
-                    "\"\n";
-            }
-            return false;
-        }
-    }
-
-    if (req_height > 0) {
-        if (req_height != h) {
-            SOIL_free_image_data(data);
-            if (err) {
-                (*err) += "Image height mismatch. for image[" +
-                    std::to_string(image_idx) + "] name = \"" + image->name +
-                    "\"\n";
-            }
-            return false;
-        }
-    }
-
-    if (req_comp != 0) {
-        // loaded data has `req_comp` channels(components)
-        comp = req_comp;
-    }
-
-    image->width = w;
-    image->height = h;
-    image->component = comp;
-    image->bits = bits;
-    image->pixel_type = pixel_type;
-    image->image.resize(static_cast<size_t>(w * h * comp) * size_t(bits / 8));
-    std::copy(data, data + w * h * comp * (bits / 8), image->image.begin());
-    SOIL_free_image_data(data);
-
-    return true;
-}
-
 unsigned int GLTFLoader::LoadGLTFTexture(int InTextureIndex, const tinygltf::Model& InModel)
 {
     if (InTextureIndex < 0 || InTextureIndex >= InModel.textures.size()) return 0;
@@ -165,41 +78,51 @@ unsigned int GLTFLoader::LoadGLTFTexture(int InTextureIndex, const tinygltf::Mod
     if (tImage.image.size() == 0) return 0;
 
 
-    unsigned int tImageFormat = 0;
+    unsigned int tImageFormat = 0, tTexFormat = 0;
     switch (tImage.component)
     {
     case 1:
-        tImageFormat = GL_R;
+        tImageFormat = GL_R8;
+        tTexFormat = GL_R;
         break;
     case 2:
-        tImageFormat = GL_RG;
+        tImageFormat = GL_RG8;
+        tTexFormat = GL_RG;
         break;
     case 3:
-        tImageFormat = GL_RGB;
+        tImageFormat = GL_RGB8;
+        tTexFormat = GL_RGB;
         break;
     case 4:
-        tImageFormat = GL_RGBA;
+        tImageFormat = GL_RGBA8;
+        tTexFormat = GL_RGBA;
         break;
     default:
         assert(0);
         break;
     }
 
+
     GLuint NewTexture = 0;
     glGenTextures(1, &NewTexture);
     glBindTexture(GL_TEXTURE_2D, NewTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, tImageFormat, tImage.width, tImage.height, 0, tImageFormat, GL_UNSIGNED_BYTE, tImage.image.data());
+    glTexImage2D(GL_TEXTURE_2D, 0, tImageFormat, tImage.width, tImage.height, 0, tTexFormat, GL_UNSIGNED_BYTE, tImage.image.data());
     glGenerateMipmap(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     return NewTexture;
 }
 
-void GLTFLoader::LoadGLTFMaterials(std::vector<std::shared_ptr<GLTFMat>>& OutMaterials, const tinygltf::Model& InModel)
+void GLTFLoader::LoadGLTFMaterials(std::vector<std::shared_ptr<GLTFMat>>& OutMaterials, const tinygltf::Model& InModel, bool Instanced)
 {
     for (const tinygltf::Material& tMaterial : InModel.materials)
     {
-        GLTFMatPtr NewMaterial(new GLTFMat(tMaterial.name));
+        GLTFMatPtr NewMaterial;
+        if (Instanced) 
+            NewMaterial.reset(new InstancedGLTFMat(tMaterial.name));
+        else 
+            NewMaterial.reset(new GLTFMat(tMaterial.name));
+
         {
             const tinygltf::PbrMetallicRoughness& tPbrParam = tMaterial.pbrMetallicRoughness;
             NewMaterial->mBaseColor = Vector4(tPbrParam.baseColorFactor[0],

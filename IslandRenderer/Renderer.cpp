@@ -17,6 +17,7 @@
 #include "PointLightFilter.h"
 #include "ShadowFilter.h"
 #include "DayLooper.h"
+#include "CameraRoute.h"
 
 #include "Materials/ShadowMat.h"
 
@@ -26,12 +27,17 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mPrimitiveLib.ReadPrimitivesFromDisk();
 
 	mCamera.reset(new Camera(-30.0f, 0.0f, Vector3(0, 250.0f, 0)));
+	mCamRoute.reset(new CameraRoute(mCamera));
+	mCamRoute->GenDefaultRoute();
+	mCamRoute->PrepareForStart();
+	bUseCamRoute = false;
+
 	mProjMatrix_Cam = Matrix4::Perspective(1.0f, 15000.0f, (float)width / (float)height, 90.0f);
 
 	mSceneRoot.reset(new ReSceneNode());
 	mCamFrustum.reset(new ReFrustum());
 
-	SceneGenerator::Build(mSceneRoot, mPrimitiveLib);
+	SceneGenerator::Build(mCamera, mSceneRoot, mPrimitiveLib);
 
 	mCombinePrim = mPrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_COMBINE);
 	mSkyBoxPrim = mPrimitiveLib.GetPrimitive(PrimitiveIndex::PRI_SKY_BOX);
@@ -70,7 +76,15 @@ Renderer::~Renderer(void)
 
 void Renderer::UpdateScene(float msec)
 {
-	mCamera->UpdateCamera(msec);
+	if (bUseCamRoute)
+	{
+		mCamRoute->UpdateCamera(msec);
+	}
+	else
+	{
+		mCamera->UpdateCamera(msec);
+	}
+	
 	mSceneRoot->Update(msec);
 
 	if (bEnableDayLoop)
@@ -110,6 +124,15 @@ void Renderer::RenderScene()	{
 	projMatrix.ToIdentity();
 
 	BindShader(0);
+}
+
+void Renderer::ToggleCameraRoute()
+{
+	bUseCamRoute = !bUseCamRoute;
+	if (bUseCamRoute)
+	{
+		mCamRoute->PrepareForStart();
+	}
 }
 
 int Renderer::TryBindShader(Shader* NewShader)
@@ -171,6 +194,36 @@ void Renderer::DrawPrimitive(const std::shared_ptr<RePrimitiveComponent>& Primit
 	Primitive->Draw(bUseMaterial);
 }
 
+void Renderer::DrawInstanced()
+{
+	for (const auto& tIter : mPrimFilter->mInstancedPrimitives)
+	{
+		DrawPrimitiveIntanced(tIter.first, tIter.second, true);
+	}
+}
+
+void Renderer::DrawPrimitiveIntanced(const std::shared_ptr<RePrimitive>& Primitive, const std::vector<Matrix4>& ModelMatrices, bool bUseMaterial)
+{
+	if (bUseMaterial)
+	{
+		if (TryBindShader(Primitive->GetMaterial()->GetShader()) == 0)
+		{
+			UpdateMatrixVP(projMatrix, viewMatrix);
+		}
+	}
+	std::unique_ptr<float[]> ModelMatrixBuffer(new float[16 * ModelMatrices.size()]);
+	for (size_t i = 0; i < ModelMatrices.size(); i++)
+	{
+		memcpy(ModelMatrixBuffer.get() + 16 * i, ModelMatrices[i].values, 16 * sizeof(float));
+	}
+	glUniformMatrix4fv(glGetUniformLocation(currentShader->GetProgram(), "modelMatrices"), ModelMatrices.size(), false, ModelMatrixBuffer.get());
+	if (bUseMaterial)
+	{
+		Primitive->GetMaterial()->UpdateRenderParam();
+	}
+	Primitive->GetMesh()->DrawInstanced(ModelMatrices.size());
+}
+
 void Renderer::DrawShadowOpaque_DLight()
 {
 	for (const auto& Primitive : mShadowFilter_DLight->mPrimitives_Opaque)
@@ -181,13 +234,19 @@ void Renderer::DrawShadowOpaque_DLight()
 
 void Renderer::UpdateLightShaderParams(Shader* InShader)
 {
-	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "depthTex"), 0);
-	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "normTex"), 1);
+	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "colourTex"), 0);
+	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "depthTex"), 1);
+	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "normTex"), 2);
+	glUniform1i(glGetUniformLocation(InShader->GetProgram(), "metallicRoughnessTex"), 3);
 
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, mSceneBuffer->mDepthTex);
+	glBindTexture(GL_TEXTURE_2D, mSceneBuffer->mColourTex);
 	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, mSceneBuffer->mDepthTex);
+	glActiveTexture(GL_TEXTURE2);
 	glBindTexture(GL_TEXTURE_2D, mSceneBuffer->mNormalTex);
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, mSceneBuffer->mMetallicRoughnessTex);
 
 	glUniform3fv(glGetUniformLocation(InShader->GetProgram(), "cameraPos"), 1, (float*)&mCamera->GetPosition());
 	glUniform2f(glGetUniformLocation(InShader->GetProgram(), "pixelSize"), 1.0f / width, 1.0f / height);
@@ -202,8 +261,8 @@ void Renderer::DrawDirectionalLight()
 	{
 		UpdateLightShaderParams(mDLight->GetShader());
 		UpdateMatrixShadow(mShadowMatrix_DLight);
-		glUniform1i(glGetUniformLocation(mDLight->GetShader()->GetProgram(), "shadowTex"), 2);
-		glActiveTexture(GL_TEXTURE2);
+		glUniform1i(glGetUniformLocation(mDLight->GetShader()->GetProgram(), "shadowTex"), 4);
+		glActiveTexture(GL_TEXTURE4);
 		glBindTexture(GL_TEXTURE_2D, mShadowBuffer_DLight->mDepthTex);
 	}
 	mDLight->Draw();
@@ -227,21 +286,6 @@ void Renderer::DrawPointLight(const std::shared_ptr<RePointLightComponent>& Poin
 		UpdateLightShaderParams(PointLight->GetShader());
 	}
 	PointLight->Draw();
-}
-
-void Renderer::DrawSkyBox()
-{
-	glDepthMask(GL_FALSE);
-
-	BindShader(mSkyBoxPrim->GetMaterial()->GetShader());
-
-	UpdateMatrixVP(projMatrix, viewMatrix);
-
-	mSkyBoxPrim->UpdateMaterialParams();
-	mSkyBoxPrim->GetMaterial()->SetShaderTexture2D("sceneTex", mSceneBuffer->mEmissiveTex, 1);
-	mSkyBoxPrim->DrawMesh();
-
-	glDepthMask(GL_TRUE);
 }
 
 void Renderer::DrawShadowBuffer()
@@ -281,7 +325,10 @@ void Renderer::DrawSceneBuffer()
 	mPrimFilter->SortPrimitives();
 
 	DrawQpaque();
+	DrawInstanced();
+	glDepthMask(GL_FALSE);
 	DrawTransparent();
+	glDepthMask(GL_TRUE);
 
 	mPrimFilter->ClearPrimitives();
 
@@ -325,11 +372,27 @@ void Renderer::CombineBuffers()
 
 	BindShader(CombineMaterial->GetShader());
 
-	CombineMaterial->SetShaderTexture2D("diffuseTex", mSceneBuffer->mColourTex, 0);
+	CombineMaterial->SetShaderTexture2D("colourTex", mSceneBuffer->mColourTex, 0);
 	CombineMaterial->SetShaderTexture2D("diffuseLight", mLightBuffer->mDiffuseTex, 1);
 	CombineMaterial->SetShaderTexture2D("specularLight", mLightBuffer->mSpecularTex, 2);
 	CombineMaterial->SetShaderTexture2D("emissiveTex", mSceneBuffer->mEmissiveTex, 3);
 
 	mCombinePrim->DrawMesh();
+}
+
+void Renderer::DrawSkyBox()
+{
+	glDepthMask(GL_FALSE);
+
+	BindShader(mSkyBoxPrim->GetMaterial()->GetShader());
+
+	UpdateMatrixVP(projMatrix, viewMatrix);
+
+	mSkyBoxPrim->UpdateMaterialParams();
+	mSkyBoxPrim->GetMaterial()->SetShaderFloat("colourScale", mDLight->GetStrength() > 0.5 ? 1.0 : 0.2);
+	mSkyBoxPrim->GetMaterial()->SetShaderTexture2D("sceneTex", mSceneBuffer->mEmissiveTex, 1);
+	mSkyBoxPrim->DrawMesh();
+
+	glDepthMask(GL_TRUE);
 }
 

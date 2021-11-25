@@ -1,6 +1,5 @@
 #include "GLTFPrimitiveMesh.h"
 #include <iostream>
-#include <SOIL/SOIL.h>
 
 float GLTFPrimitiveMesh::GetBufferFloat(const unsigned char*& CurBufferPos, int InComponentType)
 {

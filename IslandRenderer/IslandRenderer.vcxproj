@@ -47,7 +47,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraRoute.cpp" />
     <ClCompile Include="DayLooper.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="GLTFPrimitiveMesh.cpp" />
@@ -151,12 +152,15 @@
     <ClCompile Include="TinyGLTF.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraRoute.h" />
     <ClInclude Include="DayLooper.h" />
     <ClInclude Include="GLTFLoader.h" />
     <ClInclude Include="GLTFPrimitiveMesh.h" />
     <ClInclude Include="Materials\CombineMat.h" />
+    <ClInclude Include="Materials\FireFlyMat.h" />
     <ClInclude Include="Materials\GLTFMat.h" />
     <ClInclude Include="Materials\HeightMapMat.h" />
+    <ClInclude Include="Materials\InstancedGLTFMat.h" />
     <ClInclude Include="Materials\LightMat.h" />
     <ClInclude Include="FilterContainer.h" />
     <ClInclude Include="Materials\MaterialCollection.h" />
@@ -164,12 +168,15 @@
     <ClInclude Include="Materials\ShadowMat.h" />
     <ClInclude Include="Materials\SkyBoxMat.h" />
     <ClInclude Include="Materials\WaterMat.h" />
+    <ClInclude Include="NodeComponent\FireFlyComponent.h" />
+    <ClInclude Include="NodeComponent\ScaleLightComponent.h" />
     <ClInclude Include="NodeComponent\WaterComponent.h" />
     <ClInclude Include="PointLightFilter.h" />
     <ClInclude Include="PrimitiveFilter.h" />
     <ClInclude Include="PrimitiveLibrary.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneGenerator.h" />
+    <ClInclude Include="SceneNode\LookCamNode.h" />
     <ClInclude Include="SceneNode\UpDownNode.h" />
     <ClInclude Include="ShadowFilter.h" />
   </ItemGroup>

@@ -17,16 +17,13 @@ public:
 	GLTFLoader() {};
 	~GLTFLoader() {};
 
-	bool LoadFile(const std::string& FileName);
+	bool LoadFile(const std::string& FileName, bool Instanced = false);
 
 protected:
 	static std::string GetFilePathExtension(const std::string& FileName);
-	static bool LoadTextureData(tinygltf::Image* image, const int image_idx, std::string* err,
-		std::string* warn, int req_width, int req_height,
-		const unsigned char* bytes, int size, void* userdata);
 
 	unsigned int LoadGLTFTexture(int InTextureIndex, const tinygltf::Model& InModel);
-	void LoadGLTFMaterials(std::vector<std::shared_ptr<GLTFMat>>& OutMaterials, const tinygltf::Model& InModel);
+	void LoadGLTFMaterials(std::vector<std::shared_ptr<GLTFMat>>& OutMaterials, const tinygltf::Model& InModel, bool Instanced);
 
 public:
 	std::vector<GLTFMesh> mMeshes;

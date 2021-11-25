@@ -1,19 +1,18 @@
 #include "HeightMap.h"
 #include <iostream>
+#include "SimpleImage.h"
 
 HeightMap::HeightMap(const std::string& HeightFile, const std::string& ColourFile)
 {
 	int iWidth, iHeight, iChans;
-	unsigned char* HeightData = SOIL_load_image(HeightFile.c_str(), &iWidth, &iHeight, &iChans, 1);
-	
+	//unsigned char* HeightData = SOIL_load_image(HeightFile.c_str(), &iWidth, &iHeight, &iChans, 1);
+	unsigned char* HeightData = SimpleImage::LoadImageFromFile(HeightFile.c_str(), &iWidth, &iHeight, &iChans, 1);
+
 	if (!HeightData)
 	{
 		std::cout << "Heightmap can't load height file!\n";
 		return;
 	}
-
-
-
 
 	numVertices = iWidth * iHeight;
 	numIndices = (iWidth - 1) * (iHeight - 1) * 6;
@@ -35,7 +34,8 @@ HeightMap::HeightMap(const std::string& HeightFile, const std::string& ColourFil
 		}
 	}
 
-	SOIL_free_image_data(HeightData);
+	//SOIL_free_image_data(HeightData);
+	SimpleImage::FreeImage(HeightData);
 
 	int i = 0;
 
@@ -62,7 +62,7 @@ HeightMap::HeightMap(const std::string& HeightFile, const std::string& ColourFil
 	if (!ColourFile.empty())
 	{
 		int ColourWidth, ColourHeight, ColourChans;
-		unsigned char* ColourData = SOIL_load_image(ColourFile.c_str(), &ColourWidth, &ColourHeight, &ColourChans, SOIL_LOAD_RGBA);
+		unsigned char* ColourData = SimpleImage::LoadImageFromFile(ColourFile.c_str(), &ColourWidth, &ColourHeight, &ColourChans, 4);
 
 		if (ColourData)
 		{
@@ -89,13 +89,10 @@ HeightMap::HeightMap(const std::string& HeightFile, const std::string& ColourFil
 					}
 				}
 			}
+			SimpleImage::FreeImage(ColourData);
 		}
-		SOIL_free_image_data(ColourData);
 	}
 	
-
-
-
 	GenerateNormals();
 	GenerateTangents();
 

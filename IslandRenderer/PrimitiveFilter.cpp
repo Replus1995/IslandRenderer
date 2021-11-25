@@ -35,7 +35,19 @@ void PrimitiveFilter::FindPrimitives(const std::shared_ptr<ReSceneNode>& InNode)
 			}
 			else
 			{
-				mPrimitives_Opaque.push_back(NewContainer);
+				if (PrimitiveComponent->IsInstanced())
+				{
+					RePrimitivePtr tPrimitive = PrimitiveComponent->GetPrimitive();
+					if (mInstancedPrimitives.find(tPrimitive) == mInstancedPrimitives.end())
+					{
+						mInstancedPrimitives[tPrimitive] = std::vector<Matrix4>();
+					}
+					mInstancedPrimitives[tPrimitive].push_back(PrimitiveComponent->GetWorldTransform());
+				}
+				else
+				{
+					mPrimitives_Opaque.push_back(NewContainer);
+				}
 			}
 		}
 	}
@@ -56,4 +68,5 @@ void PrimitiveFilter::ClearPrimitives()
 {
 	mPrimitives_Transparent.clear();
 	mPrimitives_Opaque.clear();
+	mInstancedPrimitives.clear();
 }

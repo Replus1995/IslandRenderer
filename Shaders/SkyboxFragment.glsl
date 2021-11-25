@@ -2,6 +2,7 @@
 
 uniform samplerCube cubeTex;
 uniform sampler2D sceneTex;
+uniform float colourScale;
 
 in Vertex
 {
@@ -18,5 +19,5 @@ void main(void)
     {
         alpha = 0.0;
     }
-    fragColour = vec4(texture(cubeTex, normalize(IN.viewDir)).rgb, 1.0f - alpha);
+    fragColour = vec4(texture(cubeTex, normalize(IN.viewDir)).rgb * colourScale, 1.0f - alpha);
 }

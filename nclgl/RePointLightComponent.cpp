@@ -1,6 +1,6 @@
 #include "RePointLightComponent.h"
 
-RePointLightComponent::RePointLightComponent(RePrimitivePtr InPrim, const Vector4& InColour, const float InRadius)
+RePointLightComponent::RePointLightComponent(const RePrimitivePtr& InPrim, const Vector4& InColour, const float InRadius)
 	: mLightPrim(InPrim)
 	, mLightColour(InColour)
 	, mLightRadius(InRadius)

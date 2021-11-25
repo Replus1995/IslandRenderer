@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include "Shader.h"
+#include "SimpleImage.h"
 
 class ReMaterial
 {

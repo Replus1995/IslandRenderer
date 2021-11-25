@@ -70,6 +70,7 @@
     <ClCompile Include="ReShadowBuffer.cpp">
       <Filter>ReFiles\FrameBuffer</Filter>
     </ClCompile>
+    <ClCompile Include="SimpleImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="ReShadowBuffer.h">
       <Filter>ReFiles\FrameBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="SimpleImage.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GLAD">

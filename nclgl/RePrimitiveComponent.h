@@ -16,6 +16,7 @@ public:
 
 	// Primitive Api//
 	virtual bool IsTransparent() const;
+	virtual bool IsInstanced() const;
 	virtual void Draw(bool bUseMaterial = true);
 	// Primitive Api//
 

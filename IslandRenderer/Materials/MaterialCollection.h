@@ -7,3 +7,5 @@
 #include "SkyBoxMat.h"
 #include "WaterMat.h"
 #include "GLTFMat.h"
+#include "InstancedGLTFMat.h"
+#include "FireFlyMat.h"

@@ -8,6 +8,7 @@ public:
 		: ReMaterial("Material_Water")
 	{
 		LoadShader("WaterVertex.glsl", "WaterFragment.glsl");
+		//LoadShader("WaterVertex.glsl", "WaterLateFragment.glsl");
 	};
 	~WaterMat() 
 	{
@@ -23,8 +24,8 @@ public:
 
 	void LoadTextures()
 	{
-		DiffuseTex = SOIL_load_OGL_texture(TEXTUREDIR"water.tga", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
-		NormTex = SOIL_load_OGL_texture(TEXTUREDIR"waterbump.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS);
+		DiffuseTex = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"water.tga", true);
+		NormTex = SimpleImage::LoadTexture2DFromFile(TEXTUREDIR"waterbump.png", true);
 		SetTextureRepeating(DiffuseTex, true);
 		SetTextureRepeating(NormTex, true);
 	};

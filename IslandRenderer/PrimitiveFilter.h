@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include <map>
 #include "FilterContainer.h"
 #include "../nclgl/Vector3.h"
 #include "../nclgl/Matrix4.h"
@@ -8,6 +9,7 @@
 class Camera;
 class ReFrustum;
 class ReSceneNode;
+class RePrimitive;
 
 class PrimitiveFilter
 {
@@ -22,6 +24,8 @@ public:
 public:
 	std::vector<PrimitiveContainer> mPrimitives_Transparent;
 	std::vector<PrimitiveContainer> mPrimitives_Opaque;
+
+	std::map<std::shared_ptr<RePrimitive>, std::vector<Matrix4>> mInstancedPrimitives;
 
 protected:
 	std::shared_ptr<Camera> mCamera;

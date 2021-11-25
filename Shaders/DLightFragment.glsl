@@ -31,7 +31,6 @@ void main(void)
     vec3 halfDir = normalize(incident + viewDir);
 
     float lambert = clamp(dot(incident, normal), 0.0, 1.0);
-    float rFactor = clamp(dot(halfDir, normal), 0.0, 1.0);
     float specFactor = clamp(dot(halfDir, normal), 0.0, 1.0);
 
     specFactor = pow(specFactor, 60.0);

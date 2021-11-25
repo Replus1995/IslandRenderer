@@ -57,6 +57,19 @@ void  Camera::UpdateCamera(float dt)
 		speedFactor -= 20;
 		speedFactor = speedFactor < 60 ? 60 : speedFactor;
 	}
+
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_1))
+	{
+		testPos = GetPosition();
+		testQuat = GetQuat();
+		printf("Cam Location: (%f,%f,%f)\n", testPos.x, testPos.y, testPos.z);
+		printf("Cam Rotation: (%f,%f,%f,%f)\n", testQuat.x, testQuat.y, testQuat.z, testQuat.w);
+	}
+	if (Window::GetKeyboard()->KeyTriggered(KEYBOARD_2))
+	{
+		SetPosition(testPos);
+		SetQuat(testQuat);
+	}
 }
 
 Matrix4 Camera::BuildViewMatrix()
@@ -65,4 +78,27 @@ Matrix4 Camera::BuildViewMatrix()
 		* Matrix4::Rotation(-yaw, Vector3(0, 1, 0)) 
 		* Matrix4::Translation(-position);
 }
+
+Quaternion Camera::GetQuat() const
+{
+	return Quaternion(Matrix3::Rotation(pitch, Vector3(1, 0, 0)) * Matrix3::Rotation(yaw, Vector3(0, 1, 0)));
+}
+
+void Camera::SetQuat(const Quaternion& InQuate)
+{
+	Vector3 Angles = InQuate.ToEuler();
+	pitch = Angles.x;
+	yaw = Angles.y;
+	pitch = std::min(pitch, 90.0f);
+	pitch = std::max(pitch, -90.0f);
+	if (yaw < 0)
+	{
+		yaw += 360.0f;
+	}
+	if (yaw > 360.0f)
+	{
+		yaw -= 360.0f;
+	}
+}
+
 

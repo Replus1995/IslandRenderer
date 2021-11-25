@@ -23,11 +23,11 @@ public:
 
 	void LoadTextures()
 	{
-		SkyTex = SOIL_load_OGL_cubemap(
-			TEXTUREDIR"skybox/right.jpg", TEXTUREDIR"skybox/left.jpg",
-			TEXTUREDIR"skybox/top.jpg", TEXTUREDIR"skybox/bottom.jpg",
-			TEXTUREDIR"skybox/front.jpg", TEXTUREDIR"skybox/back.jpg",
-			SOIL_LOAD_RGB, SOIL_CREATE_NEW_ID, 0);
+		SkyTex = SimpleImage::LoadTextureCubeFromFile(
+			TEXTUREDIR"skybox/left.jpg", TEXTUREDIR"skybox/right.jpg",
+			TEXTUREDIR"skybox/bottom.jpg", TEXTUREDIR"skybox/top.jpg",
+			TEXTUREDIR"skybox/back.jpg", TEXTUREDIR"skybox/front.jpg",
+			false);
 	};
 public:
 	GLuint SkyTex = 0;

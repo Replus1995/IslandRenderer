@@ -108,6 +108,34 @@ Matrix4 Matrix4::BuildViewMatrix(const Vector3 &from, const Vector3 &lookingAt, 
 	return m*r;
 }
 
+Matrix4 Matrix4::ModelLookAt(const Vector3& from, const Vector3& lookingAt, const Vector3 up)
+{
+	Matrix4 m;
+
+	Vector3 f = (lookingAt - from);
+	f.Normalise();
+
+	Vector3 s = Vector3::Cross(f, up);
+	Vector3 u = Vector3::Cross(s, f);
+
+	s.Normalise();
+	u.Normalise();
+
+	m.values[0] = s.x;
+	m.values[1] = s.y;
+	m.values[2] = s.z;
+
+	m.values[4] = u.x;
+	m.values[5] = u.y;
+	m.values[6] = u.z;
+
+	m.values[8] = -f.x;
+	m.values[9] = -f.y;
+	m.values[10] = -f.z;
+
+	return m;
+}
+
 Matrix4 Matrix4::Rotation(float degrees, const Vector3 &inaxis)	 {
 	Matrix4 m;
 

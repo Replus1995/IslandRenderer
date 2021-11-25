@@ -16,7 +16,14 @@ public:
 	{
 		LoadShader("CommonVertex.glsl", "GLTFFragment.glsl");
 	};
-	~GLTFMat() 
+
+	GLTFMat(const std::string& InName, const std::string& InVertex, const std::string& InFragment)
+		: ReMaterial(InName)
+	{
+		LoadShader(InVertex, InFragment);
+	};
+
+	virtual ~GLTFMat() 
 	{
 		if (mBaseColorTex) glDeleteTextures(1, &mBaseColorTex);
 		if (mMetallicRoughnessTex) glDeleteTextures(1, &mMetallicRoughnessTex);
@@ -46,6 +53,11 @@ public:
 		SetShaderBool("bUseNormalTex", mNormalTex ? true : false);
 		SetShaderBool("bUseOcclutionTex", mOcclutionTex ? true : false);
 		SetShaderBool("bUseEmissiveTex", mEmissiveTex ? true : false);
+	};
+
+	virtual void LoadGLTFShader()
+	{
+		
 	};
 
 public:
