@@ -11,6 +11,7 @@
 #include "../nclgl/ReShadowBuffer.h"
 #include "../nclgl/ReSceneBuffer.h"
 #include "../nclgl/ReLightBuffer.h"
+#include "../nclgl/ReSingleBuffer.h"
 
 #include "SceneGenerator.h"
 #include "PrimitiveFilter.h"
@@ -58,6 +59,7 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mShadowBuffer_DLight.reset(new ReShadowBuffer(ShadowSize, ShadowSize));
 	mSceneBuffer.reset(new ReSceneBuffer(width, height));
 	mLightBuffer.reset(new ReLightBuffer(width, height));
+	mSingleBuffer.reset(new ReSingleBuffer(width, height));
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
@@ -111,6 +113,10 @@ void Renderer::RenderScene()	{
 	projMatrix = Matrix4::Perspective(1.0f, 10000.0f, (float)width / (float)height, 45.0f);
 	mCamFrustum->FromMatrix(projMatrix * viewMatrix);
 
+
+	mPrimFilter->FindPrimitives(mSceneRoot);
+	mPrimFilter->SortPrimitives();	
+
 	DrawSceneBuffer();
 	DrawLightBuffer();
 
@@ -118,6 +124,16 @@ void Renderer::RenderScene()	{
 
 	CombineBuffers();
 	DrawSkyBox();
+
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, mSceneBuffer->mFBO);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+	glDepthMask(GL_FALSE);
+	DrawTransparent();
+	glDepthMask(GL_TRUE);
+
+	mPrimFilter->ClearPrimitives();
 
 	modelMatrix.ToIdentity();
 	viewMatrix.ToIdentity();
@@ -172,7 +188,7 @@ void Renderer::DrawQpaque()
 	}
 }
 
-void Renderer::DrawTransparent()
+void Renderer::DrawTransparentOpaque()
 {
 	for (const auto& Conatiner : mPrimFilter->mPrimitives_Transparent)
 	{
@@ -222,6 +238,32 @@ void Renderer::DrawPrimitiveIntanced(const std::shared_ptr<RePrimitive>& Primiti
 		Primitive->GetMaterial()->UpdateRenderParam();
 	}
 	Primitive->GetMesh()->DrawInstanced(ModelMatrices.size());
+}
+
+void Renderer::DrawTransparent()
+{
+	for (const auto& Conatiner : mPrimFilter->mPrimitives_Transparent)
+	{
+		DrawPrimitiveForward(Conatiner.Component, true);
+	}
+}
+
+void Renderer::DrawPrimitiveForward(const std::shared_ptr<RePrimitiveComponent>& Primitive, bool bUseMaterial)
+{
+	if (bUseMaterial)
+	{
+		if (TryBindShader(Primitive->GetShader()) == 0)
+		{
+			UpdateMatrixVP(projMatrix, viewMatrix);
+			glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "lightDir"), 1, (float*)&mDLight->GetDirVector());
+			glUniform4fv(glGetUniformLocation(currentShader->GetProgram(), "lightColour"), 1, (float*)&mDLight->GetColour());
+			glUniform1f(glGetUniformLocation(currentShader->GetProgram(), "lightStrength"), mDLight->GetStrength());
+			glUniform3fv(glGetUniformLocation(currentShader->GetProgram(), "cameraPos"), 1, (float*)&mCamera->GetPosition());
+		}
+	}
+	Matrix4 ModelMatrix = Primitive->GetWorldTransform();
+	UpdateMatrixModel(ModelMatrix);
+	Primitive->Draw(bUseMaterial);
 }
 
 void Renderer::DrawShadowOpaque_DLight()
@@ -321,16 +363,16 @@ void Renderer::DrawSceneBuffer()
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-	mPrimFilter->FindPrimitives(mSceneRoot);
-	mPrimFilter->SortPrimitives();
+	//mPrimFilter->FindPrimitives(mSceneRoot);
+	//mPrimFilter->SortPrimitives();
 
 	DrawQpaque();
 	DrawInstanced();
-	glDepthMask(GL_FALSE);
-	DrawTransparent();
-	glDepthMask(GL_TRUE);
+	/*glDepthMask(GL_FALSE);
+	DrawTransparentOpaque();
+	glDepthMask(GL_TRUE);*/
 
-	mPrimFilter->ClearPrimitives();
+	//mPrimFilter->ClearPrimitives();
 
 	mSceneBuffer->Unbind();
 }

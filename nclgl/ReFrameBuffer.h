@@ -59,7 +59,7 @@ protected:
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
-protected:
+public:
 	uint32_t mWidth;
 	uint32_t mHeight;
 	GLuint mFBO;

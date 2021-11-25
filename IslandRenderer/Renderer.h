@@ -13,6 +13,7 @@ class ReDLight;
 class ReShadowBuffer;
 class ReSceneBuffer;
 class ReLightBuffer;
+class ReSingleBuffer;
 
 class ShadowFilter;
 class PrimitiveFilter;
@@ -39,10 +40,13 @@ protected:
 	void UpdateMatrixShadow(const Matrix4& ShadowMatrix);
 	
 	void DrawQpaque();
-	void DrawTransparent();
+	void DrawTransparentOpaque();
 	void DrawPrimitive(const std::shared_ptr<RePrimitiveComponent>& Primitive, bool bUseMaterial);
 	void DrawInstanced();
 	void DrawPrimitiveIntanced(const std::shared_ptr<RePrimitive>& Primitive, const std::vector<Matrix4>& ModelMatrices, bool bUseMaterial);
+
+	void DrawTransparent();
+	void DrawPrimitiveForward(const std::shared_ptr<RePrimitiveComponent>& Primitive, bool bUseMaterial);
 
 	void DrawShadowOpaque_DLight();
 
@@ -91,4 +95,6 @@ protected:
 
 	std::shared_ptr<RePrimitive> mSkyBoxPrim;
 	std::shared_ptr<RePrimitive> mCombinePrim;
+
+	std::unique_ptr<ReSingleBuffer> mSingleBuffer;
 };

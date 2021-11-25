@@ -40,13 +40,6 @@ void SceneGenerator::Build(const std::shared_ptr<Camera>& Camera, const std::sha
 	SceneRoot->AddChild(Ground_Node);
 	Ground_Node->SetTransform(Matrix4::Translation(Vector3(0, 30, 0)));
 	//ground//
-
-	//beach//
-	ReSceneNodePtr Beach_Node(new ReSceneNode());
-	SceneRoot->AddChild(Beach_Node);
-	Beach_Node->SetTransform(Matrix4::Translation(Vector3(0, 10, 0)));
-	//beach//
-
 	
 
 	ReSceneNodePtr CubeOri_Node(new ReSceneNode());
@@ -116,9 +109,9 @@ void SceneGenerator::Build(const std::shared_ptr<Camera>& Camera, const std::sha
 	tLoader->LoadFile(MESHDIR"DamagedHelmet.glb");
 	ReSceneNodePtr Helmet_Node = GenGLTFNode(tLoader.get());
 	Ground_Node->AddChild(Helmet_Node);
-	Helmet_Node->SetTransform(Matrix4::Translation(Vector3(80.0f, 80.0f, 10.0f)) * Matrix4::Scale(Vector3(50, 50, 50)) * Matrix4::Rotation(90, Vector3(0, 1, 0)) * Matrix4::Rotation(60, Vector3(1, 0, 0)));
+	Helmet_Node->SetTransform(Matrix4::Translation(Vector3(250.0f, 16.0f, -18.0f)) * Matrix4::Scale(Vector3(20, 20, 20)) * Matrix4::Rotation(-60, Vector3(0, 1, 0)) * Matrix4::Rotation(75, Vector3(1, 0, 0)));
 
-
+	
 	return;
 }
 

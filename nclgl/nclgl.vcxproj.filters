@@ -71,6 +71,9 @@
       <Filter>ReFiles\FrameBuffer</Filter>
     </ClCompile>
     <ClCompile Include="SimpleImage.cpp" />
+    <ClCompile Include="ReSingleBuffer.cpp">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common.h" />
@@ -163,6 +166,9 @@
       <Filter>ReFiles\FrameBuffer</Filter>
     </ClInclude>
     <ClInclude Include="SimpleImage.h" />
+    <ClInclude Include="ReSingleBuffer.h">
+      <Filter>ReFiles\FrameBuffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GLAD">

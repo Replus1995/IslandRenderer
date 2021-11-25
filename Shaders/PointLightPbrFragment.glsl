@@ -53,7 +53,7 @@ void main(void)
     {
         discard;
     }
-    
+
     vec3 colour = texture(colourTex, texCoord).rgb;
     vec3 normal = normalize(texture(normTex, texCoord).xyz * 2.0 - 1.0);
     vec3 incident = normalize(lightPos - worldPos);
@@ -69,11 +69,11 @@ void main(void)
     reflective = mix(reflective, colour, metallic);
     vec3 F = Schlick_F(reflective, max(dot(halfDir, viewDir), 0));
     float D = GGX_D(normal, halfDir, roughness);
-    float G = GGX_G(normal, viewDir, roughness);
+    float G = GGX_G(normal, viewDir, roughness) * GGX_G(normal, incident, roughness);
 
     vec3 diffuse = (vec3(1.0) - F) * (1.0 - metallic) / PI;
-    float nl = max(dot(normal, incident), 0);
-    float nv = max(dot(normal, viewDir), 0);
+    float nl = dot(normal, incident);
+    float nv = dot(normal, viewDir);
     vec3 specular = (F * D * G) / (4 * nl * nv);
 
     vec3 radiance = lightColour.xyz * atten * 2;

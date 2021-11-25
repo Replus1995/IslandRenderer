@@ -7,8 +7,8 @@ public:
 	WaterMat()
 		: ReMaterial("Material_Water")
 	{
-		LoadShader("WaterVertex.glsl", "WaterFragment.glsl");
-		//LoadShader("WaterVertex.glsl", "WaterLateFragment.glsl");
+		//LoadShader("WaterVertex.glsl", "WaterFragment.glsl");
+		LoadShader("WaterVertex.glsl", "WaterLateFragment.glsl");
 	};
 	~WaterMat() 
 	{
