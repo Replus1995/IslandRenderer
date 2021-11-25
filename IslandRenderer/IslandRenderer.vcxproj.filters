@@ -44,9 +44,6 @@
     <ClCompile Include="PrimitiveFilter.cpp">
       <Filter>ObjectFilter</Filter>
     </ClCompile>
-    <ClCompile Include="ShadowFilter.cpp">
-      <Filter>ObjectFilter</Filter>
-    </ClCompile>
     <ClCompile Include="GLTFPrimitiveMesh.cpp">
       <Filter>GLTF</Filter>
     </ClCompile>
@@ -61,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="CameraRoute.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowFilter.cpp">
+      <Filter>ObjectFilter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -100,9 +100,6 @@
     <ClInclude Include="PrimitiveFilter.h">
       <Filter>ObjectFilter</Filter>
     </ClInclude>
-    <ClInclude Include="ShadowFilter.h">
-      <Filter>ObjectFilter</Filter>
-    </ClInclude>
     <ClInclude Include="Materials\WaterMat.h">
       <Filter>Materials</Filter>
     </ClInclude>
@@ -130,9 +127,6 @@
     <ClInclude Include="CameraRoute.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SceneNode\LookCamNode.h">
-      <Filter>SceneNode</Filter>
-    </ClInclude>
     <ClInclude Include="Materials\FireFlyMat.h">
       <Filter>Materials</Filter>
     </ClInclude>
@@ -144,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="Materials\InstancedGLTFMat.h">
       <Filter>Materials</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowFilter.h">
+      <Filter>ObjectFilter</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

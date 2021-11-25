@@ -176,7 +176,6 @@
     <ClInclude Include="PrimitiveLibrary.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="SceneGenerator.h" />
-    <ClInclude Include="SceneNode\LookCamNode.h" />
     <ClInclude Include="SceneNode\UpDownNode.h" />
     <ClInclude Include="ShadowFilter.h" />
   </ItemGroup>

@@ -9,7 +9,6 @@
 #include "../nclgl/HeightMap.h"
 
 #include "SceneNode/UpDownNode.h"
-#include "SceneNode/LookCamNode.h"
 #include "NodeComponent/WaterComponent.h"
 #include "NodeComponent/FireFlyComponent.h"
 #include "NodeComponent/ScaleLightComponent.h"

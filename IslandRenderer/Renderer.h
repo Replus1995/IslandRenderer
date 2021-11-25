@@ -71,7 +71,7 @@ protected:
 
 	std::shared_ptr<Camera> mCamera;
 	Matrix4 mProjMatrix_Cam;
-	bool bUseCamRoute;
+	bool bUseCamRoute = true;
 	std::unique_ptr<CameraRoute> mCamRoute;
 
 	std::shared_ptr<ReSceneNode> mSceneRoot;

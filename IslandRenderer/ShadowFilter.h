@@ -17,7 +17,6 @@ public:
 	void ClearPrimitives();
 
 public:
-	std::vector<std::shared_ptr<RePrimitiveComponent>> mPrimitives_Transparent;
 	std::vector<std::shared_ptr<RePrimitiveComponent>> mPrimitives_Opaque;
 
 };

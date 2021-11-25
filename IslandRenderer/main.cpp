@@ -2,7 +2,7 @@
 #include "Renderer.h"
 
 int main()	{
-	Window w("Island Renderer", 1920, 1080, false);
+	Window w("Island Renderer", 1920, 1080, true);
 
 	if(!w.HasInitialised()) {
 		return -1;

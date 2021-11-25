@@ -31,7 +31,6 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mCamRoute.reset(new CameraRoute(mCamera));
 	mCamRoute->GenDefaultRoute();
 	mCamRoute->PrepareForStart();
-	bUseCamRoute = false;
 
 	mProjMatrix_Cam = Matrix4::Perspective(1.0f, 15000.0f, (float)width / (float)height, 90.0f);
 

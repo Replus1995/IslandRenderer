@@ -13,7 +13,7 @@ public:
 
 	virtual void Update(float msec) 
 	{
-		mRotate += msec * 1.0f;
+		mRotate += msec * 0.5f;
 		mCycle += msec * 0.1f;
 	};
 

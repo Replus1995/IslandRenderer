@@ -17,11 +17,7 @@ void ShadowFilter::FindPrimitives(const std::shared_ptr<ReSceneNode>& InNode)
 		RePrimitiveComponentPtr PrimitiveComponent = std::static_pointer_cast<RePrimitiveComponent>(Component);
 		if(PrimitiveComponent->CastShadow())
 		{
-			if (PrimitiveComponent->IsTransparent())
-			{
-				mPrimitives_Transparent.push_back(PrimitiveComponent);
-			}
-			else
+			if (!PrimitiveComponent->IsTransparent())
 			{
 				mPrimitives_Opaque.push_back(PrimitiveComponent);
 			}
@@ -36,6 +32,5 @@ void ShadowFilter::FindPrimitives(const std::shared_ptr<ReSceneNode>& InNode)
 
 void ShadowFilter::ClearPrimitives()
 {
-	mPrimitives_Transparent.clear();
 	mPrimitives_Opaque.clear();
 }
