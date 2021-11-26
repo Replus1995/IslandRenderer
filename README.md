@@ -1,6 +1,6 @@
 # IslandRenderer
 ## CSC8502 course work
-
+* Compiled binary can be downloaded at https://github.com/rejewl/IslandRenderer
 ## How to control
 * Press O to start/stop camera animation.
 * Press L to start/stop day/night loop.
