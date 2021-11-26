@@ -11,7 +11,6 @@
 #include "../nclgl/ReShadowBuffer.h"
 #include "../nclgl/ReSceneBuffer.h"
 #include "../nclgl/ReLightBuffer.h"
-#include "../nclgl/ReSingleBuffer.h"
 
 #include "SceneGenerator.h"
 #include "PrimitiveFilter.h"
@@ -58,7 +57,6 @@ Renderer::Renderer(Window &parent) : OGLRenderer(parent)
 	mShadowBuffer_DLight.reset(new ReShadowBuffer(ShadowSize, ShadowSize));
 	mSceneBuffer.reset(new ReSceneBuffer(width, height));
 	mLightBuffer.reset(new ReLightBuffer(width, height));
-	mSingleBuffer.reset(new ReSingleBuffer(width, height));
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);

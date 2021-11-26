@@ -95,6 +95,4 @@ protected:
 
 	std::shared_ptr<RePrimitive> mSkyBoxPrim;
 	std::shared_ptr<RePrimitive> mCombinePrim;
-
-	std::unique_ptr<ReSingleBuffer> mSingleBuffer;
 };
