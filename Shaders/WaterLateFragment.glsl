@@ -4,6 +4,7 @@ const float PI = 3.14159265;
 
 uniform sampler2D diffuseTex;
 uniform sampler2D normTex;
+uniform samplerCube cubeTex;
 
 uniform vec3 cameraPos;
 
@@ -77,6 +78,10 @@ void main(void)
     fragColour.xyz = vec3(0.1) * colour; // Ambient
     fragColour.xyz += colour * diffuse * radiance * nl; //Diffuse
     fragColour.xyz += specular * radiance * nl; // Specular
+
+    vec3 reflectDir = reflect(-viewDir,normalize(IN.normal));
+    vec4 reflectTex = texture(cubeTex,reflectDir);
+    fragColour.xyz = fragColour.xyz + reflectTex.xyz * 0.3;
 
     //fragColour.xyz = colour;
     fragColour.a = 0.5;
