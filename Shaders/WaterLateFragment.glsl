@@ -50,7 +50,8 @@ void main(void)
 {
     mat3 TBN =  mat3(normalize(IN.tangent), normalize(IN.binormal), normalize(IN.normal));
 
-    vec3 colour = texture(diffuseTex, IN.texCoord).rgb;
+    //vec3 colour = texture(diffuseTex, IN.texCoord).rgb;
+    vec3 colour = pow(texture(diffuseTex, IN.texCoord).rgb, vec3(2.2));
     vec3 normal = texture(normTex, IN.texCoord).rgb;
     normal = normalize(TBN * normalize(normal * 2.0 - 1.0));
     vec3 incident = normalize(lightDir * -1.0);

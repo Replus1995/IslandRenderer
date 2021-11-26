@@ -49,7 +49,8 @@ void main(void)
     vec4 invClipPos = inverseProjView * vec4(ndcPos, 1.0);
     vec3 worldPos = invClipPos.xyz / invClipPos.w;
 
-    vec3 colour = texture(colourTex, texCoord).rgb;
+    //vec3 colour = texture(colourTex, texCoord).rgb;
+    vec3 colour = pow(texture(colourTex, texCoord).rgb, vec3(2.2));
     vec3 normal = normalize(texture(normTex, texCoord).xyz * 2.0 - 1.0);
     vec3 incident = normalize(lightDir * -1.0f);
     vec3 viewDir = normalize(cameraPos - worldPos);
